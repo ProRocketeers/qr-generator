@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: qr-generator-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: qr_generator
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+    ports:
+      - '5436:5432'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d qr_generator"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
