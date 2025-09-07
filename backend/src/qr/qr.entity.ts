@@ -11,10 +11,10 @@ export class QrEntity {
   code!: string;
 
   @Property()
-  payload!: string;
+  data!: string;
 
   @Property({ columnType: 'text' })
-  base64!: string;
+  svg!: string;
 
   @Property({ defaultRaw: 'now()' })
   createdAt?: Date;
