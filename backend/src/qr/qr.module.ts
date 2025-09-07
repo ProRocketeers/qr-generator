@@ -9,4 +9,5 @@ import { QrController } from '@backend/qr/qr.controller';
   controllers: [QrController],
   providers: [QrCodeStyleService],
 })
+
 export class QrModule {}
