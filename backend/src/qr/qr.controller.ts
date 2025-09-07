@@ -1,52 +1,76 @@
 import { Body, Controller, Get, Param, Post, Query, Res } from '@nestjs/common'
 import { ApiTags, ApiOkResponse, ApiProduces, ApiParam, ApiQuery, ApiCreatedResponse } from '@nestjs/swagger'
 import { Response } from 'express'
-import { CreateQrDto } from '@backend/qr/dto/create-qr.dto'
-import { QrService } from '@backend/qr/qr.service'
+import { CreateQrDto, OutputType } from '@backend/qr/dto/create-qr.dto'
+import { QrCodeStyleService } from '@backend/qr/qr.service'
 
 @ApiTags('QR')
 @Controller('api/v1/qr')
 export class QrController {
-  constructor(private readonly service: QrService) {}
+  constructor(private readonly service: QrCodeStyleService) {}
+
+  private async svgToPng(svg: string): Promise<Buffer> {
+    try {
+      const mod: any = await import('sharp')
+      const sharpFn = mod.default || mod
+      return await sharpFn(Buffer.from(svg, 'utf8')).png().toBuffer()
+    } catch (e) {
+      throw new Error('PNG conversion failed: ' + (e as Error).message)
+    }
+  }
 
   @Post()
-  @ApiCreatedResponse({ description: 'Vytvoří nový QR kód a vrátí metadata nebo PNG.' })
-  @ApiProduces('application/json')
+  @ApiCreatedResponse({ description: 'Create new QR code' })
   async create(@Body() dto: CreateQrDto, @Res() res: Response) {
-    const result = await this.service.create(dto.data)
+    const { data, output = 'svg' } = dto
+    const { code } = await this.service.create(data)
 
-    if (dto.output === 'image') {
-      res.setHeader('Content-Type', 'image/png')
-      res.setHeader('X-QR-Code', result.code)
-      return res.send(result.buffer)
-    }
-
-    return res.json({
-      id: result.code,
-      base64: result.base64,
-    })
+    return this.get(code, output, res)
   }
 
   @Get(':code')
   @ApiParam({ name: 'code', description: 'ID kódu (např. QRAB12)' })
-  @ApiQuery({ name: 'format', required: false, enum: ['img', 'base64'], description: 'Formát odpovědi' })
-  @ApiOkResponse({ description: 'Načtení existujícího QR kódu' })
-  async get(@Param('code') code: string, @Query('format') output: string, @Res() res: Response) {
-    const e = await this.service.findOne(code)
+  @ApiQuery({
+    name: 'output',
+    required: false,
+    enum: ['png', 'svg', 'dataUri', 'base64', 'json'],
+    description: 'Optional response format',
+  })
+  @ApiProduces('application/json', 'image/svg+xml', 'image/png', 'text/plain')
+  @ApiOkResponse({ description: 'Get existing QR code' })
+  async get(@Param('code') code: string, @Query('output') output: OutputType, @Res() res: Response) {
+    const { data, svg, createdAt = new Date() } = await this.service.findOne(code)
 
-    if (output === 'img') {
-      res.setHeader('Content-Type', 'image/png')
-      return res.send(Buffer.from(e.base64, 'base64'))
+    const base64 = Buffer.from(svg, 'utf8').toString('base64')
+    res.setHeader('X-QR-Code-ID', code)
+
+    if (output === 'svg') {
+      res.type('image/svg+xml; charset=utf-8')
+      return res.send(svg)
+    }
+
+    if (output === 'png') {
+      const pngBuffer = await this.svgToPng(svg)
+      res.type('image/png')
+      return res.send(pngBuffer)
     }
 
     if (output === 'base64') {
-      return res.send(e.base64)
+      res.type('text/plain; charset=utf-8')
+      return res.send(base64)
     }
 
+    if (output === 'dataUri') {
+      return res.json({ id: code, dataUri: 'data:image/svg+xml;base64,' + base64 })
+    }
+
+    // default output === JSON
     return res.json({
-      id: e.code,
-      payload: e.payload,
-      createdAt: e.createdAt,
+      id: code,
+      svg,
+      data,
+      base64,
+      createdAt,
     })
   }
 }

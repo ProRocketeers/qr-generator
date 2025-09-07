@@ -1,3 +1,4 @@
+import './polyfills/dom-env'
 import { NestFactory } from '@nestjs/core'
 import { ValidationPipe } from '@nestjs/common'
 import { NestExpressApplication } from '@nestjs/platform-express'
@@ -10,7 +11,7 @@ async function bootstrap() {
   configureSwagger(app)
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
 
-  await app.listen(3000)
+  const port = Number(process.env.PORT || 3000)
+  await app.listen(port)
 }
-
 bootstrap()

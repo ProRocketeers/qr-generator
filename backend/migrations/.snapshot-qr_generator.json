@@ -25,8 +25,8 @@
           "length": 255,
           "mappedType": "string"
         },
-        "payload": {
-          "name": "payload",
+        "data": {
+          "name": "data",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -35,8 +35,8 @@
           "length": 255,
           "mappedType": "string"
         },
-        "base64": {
-          "name": "base64",
+        "svg": {
+          "name": "svg",
           "type": "text",
           "unsigned": false,
           "autoincrement": false,
@@ -50,7 +50,7 @@
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
-          "nullable": false,
+          "nullable": true,
           "length": 6,
           "default": "now()",
           "mappedType": "datetime"
@@ -59,6 +59,16 @@
       "name": "qr_codes",
       "schema": "public",
       "indexes": [
+        {
+          "columnNames": [
+            "code"
+          ],
+          "composite": false,
+          "keyName": "qr_codes_code_index",
+          "constraint": false,
+          "primary": false,
+          "unique": false
+        },
         {
           "columnNames": [
             "code"
