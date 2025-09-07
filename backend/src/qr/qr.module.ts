@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { QrEntity } from './qr.entity';
-import { QrService } from './qr.service';
-import { QrController } from './qr.controller';
+import { QrEntity } from '@backend/qr/qr.entity';
+import { QrService } from '@backend/qr/qr.service';
+import { QrController } from '@backend/qr/qr.controller';
 
 @Module({
   imports: [MikroOrmModule.forFeature([QrEntity])],
