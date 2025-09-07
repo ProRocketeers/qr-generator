@@ -16,7 +16,6 @@ export class QrEntity {
   @Property({ columnType: 'text' })
   base64!: string;
 
-  // optional = TS už to nebude vyžadovat při create()
   @Property({ defaultRaw: 'now()' })
   createdAt?: Date;
 }

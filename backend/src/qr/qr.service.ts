@@ -1,8 +1,8 @@
 import { Injectable, ConflictException, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@mikro-orm/nestjs'
 import { EntityRepository } from '@mikro-orm/core'
-import { QrEntity } from './qr.entity'
 import * as QRCode from 'qrcode'
+import { QrEntity } from '@backend/qr/qr.entity'
 
 @Injectable()
 export class QrService {
