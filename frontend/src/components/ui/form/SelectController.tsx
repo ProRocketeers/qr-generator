@@ -18,7 +18,7 @@ export const SelectController = <T extends FieldValues>({ label, control, name, 
 	return (
 		<FormFieldController control={control} name={name} label={label}>
 			{(field) => (
-				<>
+				<div>
 					<Select onValueChange={(value) => field.onChange(value)} value={field.value}>
 						<SelectTrigger className="w-[180px] m-5">
 							<SelectValue placeholder={label} />
@@ -33,7 +33,7 @@ export const SelectController = <T extends FieldValues>({ label, control, name, 
 					</Select>
 
 					<FormMessage />
-				</>
+				</div>
 			)}
 		</FormFieldController>
 	);

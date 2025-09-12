@@ -1,6 +1,7 @@
 "use client";
 import { FormContext, InputController, SelectController } from "@/components/ui/form";
 import { Button } from "@/components/ui/reusable/Button";
+import { useState } from "react";
 import z from "zod";
 
 const types = [
@@ -36,14 +37,27 @@ const schema = z.object({
 	types: z.enum(["QRUrl", "QRText", "QRWifi", "QRContact"]).default("QRUrl"),
 });
 
+type Values = {
+	name: string;
+	age: number;
+	type: (typeof types)[number];
+};
+
 export default function Home() {
+	const [values, setValues] = useState<Values>();
+
 	return (
 		<div className="bg-gray-500 h-full w-full flex flex-col items-center justify-center">
 			<h1 className="text-3xl text-yellow-500">Test form</h1>
 			<FormContext
 				schema={schema}
-				onSubmit={(values) => {
-					console.log("submit", values);
+				onSubmit={(formValues) => {
+					const selectedType = types.find((type) => type.label === formValues.types) ?? types[0];
+					setValues({
+						name: formValues.name,
+						age: formValues.age,
+						type: selectedType,
+					});
 				}}
 				defaultValues={defaultValues}
 			>
@@ -61,7 +75,9 @@ export default function Home() {
 							name="types"
 						/>
 
-						<Button type="submit">LETS GO!</Button>
+						<Button type="submit" variant="secondary">
+							LETS GO!
+						</Button>
 					</>
 				)}
 			</FormContext>
