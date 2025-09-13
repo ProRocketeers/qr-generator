@@ -1,7 +1,9 @@
 import { UrlForm } from "@/components/client/UrlForm";
+import { EmailForm } from "../../components/client/EmailForm";
 
 export const FORMS_MAP = {
 	url: UrlForm,
+	email: EmailForm,
 } as const;
 
 export type FormsType = keyof typeof FORMS_MAP;

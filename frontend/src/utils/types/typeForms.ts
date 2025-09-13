@@ -5,3 +5,9 @@ export type FormsMap = {
 export type UrlForm = {
 	url: string;
 };
+
+export type QREmail = {
+	to: string;
+	subject: string;
+	body: string;
+};
