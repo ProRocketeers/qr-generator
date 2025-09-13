@@ -7,9 +7,5 @@ type Props = {
 export const FormWrapper = async ({ type }: Props) => {
 	const FormComponent = getFormsMap({ type });
 
-	return (
-		<>
-			<div>{FormComponent ? <FormComponent /> : <div />}</div>
-		</>
-	);
+	return <div>{FormComponent ? <FormComponent /> : <div />}</div>;
 };
