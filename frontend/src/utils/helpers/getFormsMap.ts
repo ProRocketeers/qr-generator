@@ -8,4 +8,4 @@ export const FORMS_MAP = {
 
 export type FormType = keyof typeof FORMS_MAP;
 
-export const getForm = (type: FormType) => FORMS_MAP[type];
+export const getForm = (type?: FormType) => FORMS_MAP[type ?? "url"];
