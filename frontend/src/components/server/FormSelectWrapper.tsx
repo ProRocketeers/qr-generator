@@ -1,18 +1,13 @@
-import { getFormsMap } from "@/utils/helpers/getFormsMap";
-import type { FormTypeSelect } from "@/utils/types/formTypeSelect";
-import { SelectTypeForm } from "@/components/client/SelectTypeForm";
+import { getForm, type FormType } from "@/utils/helpers/getFormsMap";
 
 type Props = {
-	type: FormTypeSelect;
+	type: FormType;
 };
 
 export const FormSelectWrapper = async ({ type }: Props) => {
-	const FormComponent = getFormsMap({ type });
+	const FormComponent = getForm(type);
 
-	return (
-		<div className="h-full w-full flex flex-col items-center justify-center">
-			<SelectTypeForm />
-			{FormComponent ? <FormComponent /> : <div />}
-		</div>
-	);
+	if (FormComponent) {
+		return <FormComponent />;
+	}
 };

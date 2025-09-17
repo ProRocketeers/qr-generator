@@ -1,12 +1,11 @@
 "use client";
 import { FC } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/reusable/Select";
-import { FORMS_MAP } from "@/utils/helpers/getFormsMap";
+import { FORMS_MAP, type FormType } from "@/utils/helpers/getFormsMap";
 import { useRouter, useSearchParams } from "next/navigation";
-import type { FormTypeSelect } from "@/utils/types/formTypeSelect";
 
 type Props = {
-	initialType?: FormTypeSelect;
+	initialType?: FormType;
 };
 
 export const SelectTypeForm: FC<Props> = ({ initialType }) => {
