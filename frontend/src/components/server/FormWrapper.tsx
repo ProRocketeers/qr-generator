@@ -1,7 +1,8 @@
-import { getFormsMap, type FormsType } from "@/utils/helpers/getFormsMap";
+import { getFormsMap } from "@/utils/helpers/getFormsMap";
+import type { FormTypeSelect } from "@/utils/types/formTypeSelect";
 
 type Props = {
-	type?: FormsType;
+	type?: FormTypeSelect;
 };
 
 export const FormWrapper = async ({ type }: Props) => {
