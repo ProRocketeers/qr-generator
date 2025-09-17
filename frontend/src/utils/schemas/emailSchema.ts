@@ -5,3 +5,9 @@ export const schema = z.object({
 	subject: z.string().min(1, { message: "Subject is required" }),
 	body: z.string().min(1, { message: "Body is required" }),
 });
+
+export const defaultValues = {
+	to: "",
+	subject: "",
+	body: "",
+};

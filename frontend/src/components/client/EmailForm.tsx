@@ -2,14 +2,8 @@
 
 import { FC } from "react";
 import { FormContext, InputController } from "@/components/ui/form";
-import { schema } from "@/utils/schemas/emailSchema";
+import { defaultValues, schema } from "@/utils/schemas/emailSchema";
 import { Button } from "@/components/ui/reusable/Button";
-
-const defaultValues = {
-	to: "",
-	subject: "",
-	body: "",
-};
 
 export const EmailForm: FC = () => {
 	return (
