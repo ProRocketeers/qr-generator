@@ -2,31 +2,29 @@
 import { FC } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/reusable/Select";
 import { FORMS_MAP, type FormType } from "@/utils/helpers/getFormsMap";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 type Props = {
 	initialType?: FormType;
+	type: FormType;
 };
 
-export const SelectTypeForm: FC<Props> = ({ initialType }) => {
+export const SelectTypeForm: FC<Props> = ({ initialType = "url", type }) => {
 	const router = useRouter();
-	const searchParams = useSearchParams();
 
 	const selectData = Object.keys(FORMS_MAP).map((key) => ({
 		value: key,
 		label: key,
 	}));
 
-	const currentType = searchParams.get("type") || initialType;
-
-	const handleFormType = (type: string) => {
-		const newParams = new URLSearchParams(searchParams.toString());
-		newParams.set("type", type);
+	const handleFormType = (selectedType: string) => {
+		const newParams = new URLSearchParams();
+		newParams.set("type", selectedType);
 		router.push(`?${newParams.toString()}`);
 	};
 
 	return (
-		<Select onValueChange={handleFormType} defaultValue={currentType ? currentType : "url"}>
+		<Select onValueChange={handleFormType} defaultValue={type || initialType}>
 			<SelectTrigger className="w-[180px] m-5">
 				<SelectValue placeholder="Select QR type" />
 			</SelectTrigger>

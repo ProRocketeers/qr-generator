@@ -2,7 +2,7 @@ import { getForm, type FormType } from "@/utils/helpers/getFormsMap";
 import { SelectTypeForm } from "@/components/client/SelectTypeForm";
 
 type Props = {
-	type?: FormType;
+	type: FormType;
 };
 
 export const FormSelectWrapper = async ({ type }: Props) => {
@@ -10,7 +10,7 @@ export const FormSelectWrapper = async ({ type }: Props) => {
 
 	return (
 		<>
-			<SelectTypeForm />
+			<SelectTypeForm type={type} />
 			<FormComponent />
 		</>
 	);
