@@ -6,10 +6,9 @@ import { useRouter } from "next/navigation";
 
 type Props = {
 	initialType?: FormType;
-	type: FormType;
 };
 
-export const SelectTypeForm: FC<Props> = ({ initialType = "url", type }) => {
+export const SelectTypeForm: FC<Props> = ({ initialType = "url" }) => {
 	const router = useRouter();
 
 	const selectData = Object.keys(FORMS_MAP).map((key) => ({
@@ -24,7 +23,7 @@ export const SelectTypeForm: FC<Props> = ({ initialType = "url", type }) => {
 	};
 
 	return (
-		<Select onValueChange={handleFormType} defaultValue={type || initialType}>
+		<Select onValueChange={handleFormType} defaultValue={initialType}>
 			<SelectTrigger className="w-[180px] m-5">
 				<SelectValue placeholder="Select QR type" />
 			</SelectTrigger>

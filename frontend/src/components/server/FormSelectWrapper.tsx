@@ -10,7 +10,7 @@ export const FormSelectWrapper = async ({ type }: Props) => {
 
 	return (
 		<>
-			<SelectTypeForm type={type} />
+			<SelectTypeForm initialType={type} />
 			<FormComponent />
 		</>
 	);
