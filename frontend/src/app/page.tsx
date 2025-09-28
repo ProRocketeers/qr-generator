@@ -1,7 +1,12 @@
-export default function Home() {
+import { FormSelectWrapper } from "../components/server/FormSelectWrapper";
+import type { FormType } from "../utils/helpers/getFormsMap";
+
+export default async function Home({ searchParams }: { searchParams: { type: FormType } }) {
+	const { type } = await searchParams;
+
 	return (
-		<div className="bg-red-500 w-2/3 h-2/3">
-			<h1 className="text-3xl text-yellow-500">Hello world! haf</h1>
+		<div className=" h-full w-full flex flex-col items-center justify-center">
+			<FormSelectWrapper type={type} />
 		</div>
 	);
 }
