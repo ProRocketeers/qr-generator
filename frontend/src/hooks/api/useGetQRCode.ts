@@ -14,6 +14,5 @@ export const useGetQrCode = (qrCodeId: string | null, output: string) => {
 		queryKey: ["qrCode", qrCodeId],
 		queryFn: () => getQrCode(qrCodeId, output),
 		enabled: qrCodeId !== null && qrCodeId.trim().length > 0,
-		retry: 1,
 	});
 };
