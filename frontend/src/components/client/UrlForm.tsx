@@ -8,7 +8,7 @@ import { useGenerateQrCode } from "@/hooks/api/useGenerateQRCode";
 import { ImageQR } from "./ImageQR";
 
 export const UrlForm: FC = ({}) => {
-	const { qrCodeSvg, qrCodeId, isPending, generateQrCode } = useGenerateQrCode();
+	const { mutate, isPending, data: response } = useGenerateQrCode();
 
 	return (
 		<div>
@@ -16,7 +16,7 @@ export const UrlForm: FC = ({}) => {
 				schema={schema}
 				defaultValues={defaultValues}
 				onSubmit={(formValues) => {
-					generateQrCode(formValues.url, "json");
+					mutate({ data: formValues.url, output: "json" });
 				}}
 			>
 				{(control) => (
@@ -28,7 +28,7 @@ export const UrlForm: FC = ({}) => {
 					</div>
 				)}
 			</FormContext>
-			<ImageQR qrCodeSvg={qrCodeSvg} qrCodeId={qrCodeId} />
+			<ImageQR qrCodeSvg={response?.svg} qrCodeId={response?.code} />
 		</div>
 	);
 };

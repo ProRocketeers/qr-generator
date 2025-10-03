@@ -8,19 +8,20 @@ import { useGenerateQrCode } from "../../hooks/api/useGenerateQRCode";
 import { ImageQR } from "./ImageQR";
 
 export const EmailForm: FC = () => {
-	const { qrCodeSvg, qrCodeId, isPending, generateQrCode } = useGenerateQrCode();
+	const { mutate, isPending, data: response } = useGenerateQrCode();
+
 	return (
 		<div>
 			<FormContext
 				schema={schema}
 				defaultValues={defaultValues}
 				onSubmit={(formValues) =>
-					generateQrCode(
-						`mailto:${formValues.to}?subject=${encodeURIComponent(formValues.subject)}&body=${encodeURIComponent(
+					mutate({
+						data: `mailto:${formValues.to}?subject=${encodeURIComponent(formValues.subject)}&body=${encodeURIComponent(
 							formValues.body
 						)}`,
-						"json"
-					)
+						output: "json",
+					})
 				}
 			>
 				{(control) => (
@@ -34,7 +35,7 @@ export const EmailForm: FC = () => {
 					</>
 				)}
 			</FormContext>
-			<ImageQR qrCodeSvg={qrCodeSvg} qrCodeId={qrCodeId} />
+			<ImageQR qrCodeSvg={response?.svg} qrCodeId={response?.code} />
 		</div>
 	);
 };
