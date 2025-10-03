@@ -1,8 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "./axios";
 import { API_ENDPOINTS } from "./apiEndpoints";
-
-type OutputType = "svg" | "png" | "base64" | "dataUri" | "json";
+import type { OutputType } from "@/utils/types/OutputType";
 
 const generateQrCode = async (data: string, output?: OutputType) => {
 	const response = await api.post(API_ENDPOINTS.generateQr, { data, output });
