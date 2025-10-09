@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "./axios";
 import { API_ENDPOINTS } from "./apiEndpoints";
 import type { OutputType } from "@/utils/types/OutputType";
@@ -20,5 +20,20 @@ export const useGenerateQrCode = () => {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["qrCode"] });
 		},
+	});
+};
+
+const getQrCode = async (qrCodeId: string | null, output: string) => {
+	const response = await api.get(API_ENDPOINTS.getQr(qrCodeId, output), {
+		responseType: "text",
+	});
+	return response.data;
+};
+
+export const useGetQrCode = (qrCodeId: string | null, output: string) => {
+	return useQuery({
+		queryKey: ["qrCode", qrCodeId],
+		queryFn: () => getQrCode(qrCodeId, output),
+		enabled: qrCodeId !== null && qrCodeId.trim().length > 0,
 	});
 };

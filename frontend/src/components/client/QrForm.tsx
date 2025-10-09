@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, useState } from "react";
-import { useGetQrCode } from "@/hooks/api/useGetQRCode";
+import { useGetQrCode } from "@/hooks/api/qr";
 import { FormContext, InputController } from "../ui/form";
 import { defaultValues, schema } from "@/utils/schemas/qrSchema";
 import { Button } from "@/components/ui/reusable/Button";
@@ -34,7 +34,7 @@ export const Qr: FC = () => {
 
 			{data && (
 				<div className="mt-4">
-					<ImageQR qrCodeSvg={data} typography="QR Code from DB" />
+					<ImageQR qrCodeSvg={data} title="QR Code from DB" />
 				</div>
 			)}
 		</div>

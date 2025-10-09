@@ -5,16 +5,16 @@ import Image from "next/image";
 
 type Props = {
 	qrCodeSvg: string | null;
-	typography?: string;
+	title?: string;
 	qrCodeId?: string | null;
 };
 
-export const ImageQR: FC<Props> = ({ qrCodeSvg, typography, qrCodeId }) => {
+export const ImageQR: FC<Props> = ({ qrCodeSvg, title, qrCodeId }) => {
 	return (
 		<>
 			{qrCodeSvg && (
 				<div className="mt-4 flex flex-col gap-4 justify-center items-center">
-					<h3 className="text-lg font-semibold">{typography}</h3>
+					<h3 className="text-lg font-semibold">{title}</h3>
 					<Image
 						src={`data:image/svg+xml;base64,${btoa(qrCodeSvg)}`}
 						alt="QR Code"

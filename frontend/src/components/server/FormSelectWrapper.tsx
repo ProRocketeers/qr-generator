@@ -1,15 +1,13 @@
-"use client";
-
 import { FC } from "react";
 import { getForm, type FormType } from "@/utils/helpers/getFormsMap";
 import { SelectTypeForm } from "@/components/client/SelectTypeForm";
-import { Qr } from "@/components/client/Qr";
+import { Qr } from "@/components/client/QrForm";
 
 type Props = {
 	type: FormType;
 };
 
-export const FormSelectWrapper: FC<Props> = ({ type }) => {
+export const FormSelectWrapper = ({ type }: Props) => {
 	const FormComponent = getForm(type);
 
 	return (
