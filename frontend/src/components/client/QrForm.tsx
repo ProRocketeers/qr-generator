@@ -7,7 +7,7 @@ import { defaultValues, schema } from "@/utils/schemas/qrSchema";
 import { Button } from "@/components/ui/reusable/Button";
 import { ImageQR } from "@/components/client/ImageQR";
 
-export const Qr: FC = () => {
+export const QrForm: FC = () => {
 	const [qrCodeId, setQrCodeId] = useState<string | null>(null);
 	const { data, isLoading } = useGetQrCode(qrCodeId, "svg");
 
