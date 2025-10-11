@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, useState } from "react";
-import { useGetQrCode } from "@/hooks/api/qr";
+import { useGetQrCode } from "@/api/qr";
 import { FormContext, InputController } from "../ui/form";
 import { defaultValues, schema } from "@/utils/schemas/qrSchema";
 import { Button } from "@/components/ui/reusable/Button";

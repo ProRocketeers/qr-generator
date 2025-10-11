@@ -4,7 +4,7 @@ import { FC } from "react";
 import { FormContext, InputController } from "@/components/ui/form";
 import { defaultValues, schema } from "@/utils/schemas/urlSchema";
 import { Button } from "@/components/ui/reusable/Button";
-import { useGenerateQrCode } from "@/hooks/api/qr";
+import { useGenerateQrCode } from "@/api/qr";
 import { ImageQR } from "./ImageQR";
 
 export const UrlForm: FC = ({}) => {
