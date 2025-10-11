@@ -4,8 +4,8 @@ import { FC } from "react";
 import { FormContext, InputController } from "@/components/ui/form";
 import { defaultValues, schema } from "@/utils/schemas/urlSchema";
 import { Button } from "@/components/ui/reusable/Button";
-import { useGenerateQrCode } from "@/api/qr";
 import { ImageQR } from "./ImageQR";
+import { useGenerateQrCode } from "@/hooks/api/qr";
 
 export const UrlForm: FC = ({}) => {
 	const { mutate, isPending, data: response } = useGenerateQrCode();
