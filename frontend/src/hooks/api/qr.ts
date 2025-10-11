@@ -1,6 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { api } from "./axios";
-import { API_ENDPOINTS } from "../../api/apiEndpoints";
 import type { OutputType } from "@/utils/types/OutputType";
 import { generateQrCode, getQrCode } from "@/api/qr";
 
