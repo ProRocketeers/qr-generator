@@ -1,5 +1,5 @@
 import type { OutputType } from "@/utils/types/OutputType";
-import { api } from "@/hooks/api/axios";
+import { api } from "@/api/axios";
 import { API_ENDPOINTS } from "@/api/apiEndpoints";
 
 export const generateQrCode = async (data: string, output?: OutputType) => {
