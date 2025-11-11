@@ -5,21 +5,33 @@ import { FormContext, InputController } from "@/components/ui/form";
 import { defaultValues, schema } from "@/utils/schemas/emailSchema";
 import { Button } from "@/components/ui/reusable/Button";
 import { ImageQR } from "./ImageQR";
-import { useGenerateQrCode } from "@/hooks/api/qr";
+import { useGenerateQrCode, useGetQrCode } from "@/hooks/api/qr";
+import { decodeQrData } from "@/utils/helpers/decodeQrData";
+import type { EmailFormType } from "../../utils/types";
 
-export const EmailForm: FC = () => {
-	const { mutate, isPending, data: response } = useGenerateQrCode();
+type Props = {
+	action: ReturnType<typeof useGenerateQrCode>["mutate"];
+	isPending: boolean;
+	response: ReturnType<typeof useGenerateQrCode>["data"];
+	qrCodeId: string | null;
+};
+
+export const EmailForm: FC<Props> = ({ action, isPending, response, qrCodeId }) => {
+	const { data } = useGetQrCode(qrCodeId, "text");
+	console.log("Begore Decoded QR data:", data);
+	const decoded = decodeQrData(data?.data, "email");
+	console.log("After Decoded QR data:.", decoded);
 
 	return (
 		<div>
 			<FormContext
 				schema={schema}
-				defaultValues={defaultValues}
+				defaultValues={decodeQrData(response, "email") || defaultValues}
 				onSubmit={(formValues) =>
-					mutate({
-						data: `mailto:${formValues.to}?subject=${encodeURIComponent(formValues.subject)}&body=${encodeURIComponent(
-							formValues.body
-						)}`,
+					action({
+						data: `mailto:${String(formValues.to)}?subject=${encodeURIComponent(
+							String(formValues.subject)
+						)}&body=${encodeURIComponent(String(formValues.body))}`,
 						output: "json",
 					})
 				}
@@ -35,7 +47,8 @@ export const EmailForm: FC = () => {
 					</>
 				)}
 			</FormContext>
-			<ImageQR qrCodeSvg={response?.svg} qrCodeId={response?.code} />
+
+			<ImageQR qrCodeSvg={response?.svg ?? ""} qrCodeId={response?.id ?? ""} />
 		</div>
 	);
 };

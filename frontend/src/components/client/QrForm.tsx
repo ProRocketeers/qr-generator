@@ -2,22 +2,26 @@
 
 import { FC, useState } from "react";
 import { useGetQrCode } from "@/hooks/api/qr";
-import { FormContext, InputController } from "../ui/form";
+import { FormContext, InputController } from "@/components/ui/form";
 import { defaultValues, schema } from "@/utils/schemas/qrSchema";
 import { Button } from "@/components/ui/reusable/Button";
 import { ImageQR } from "@/components/client/ImageQR";
 
-export const QrForm: FC = () => {
-	const [qrCodeId, setQrCodeId] = useState<string | null>(null);
-	const { data, isLoading } = useGetQrCode(qrCodeId, "svg");
+type Props = {
+	handleQrCodeIdAction: (qrCodeId: string | null) => void;
+};
 
+export const QrForm: FC<Props> = ({ handleQrCodeIdAction }) => {
+	const [qrCodeId, setQrCodeId] = useState<string | null>(null);
+	const { data, isLoading } = useGetQrCode(qrCodeId, "json");
 	return (
 		<div>
 			<FormContext
 				schema={schema}
-				defaultValues={defaultValues}
-				onSubmit={(formValues) => {
-					setQrCodeId(formValues.qrCode);
+				defaultValues={data?.data ?? defaultValues}
+				onSubmit={(values) => {
+					setQrCodeId(values.qrCode);
+					handleQrCodeIdAction(values.qrCode);
 				}}
 			>
 				{(control) => (
@@ -34,7 +38,7 @@ export const QrForm: FC = () => {
 
 			{data && (
 				<div className="mt-4">
-					<ImageQR qrCodeSvg={data} title="QR Code from DB" />
+					<ImageQR qrCodeSvg={data.svg} title="QR Code from DB" />
 				</div>
 			)}
 		</div>
