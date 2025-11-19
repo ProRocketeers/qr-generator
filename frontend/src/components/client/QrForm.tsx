@@ -1,19 +1,28 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useGetQrCode } from "@/hooks/api/qr";
 import { FormContext, InputController } from "@/components/ui/form";
 import { defaultValues, schema } from "@/utils/schemas/qrSchema";
 import { Button } from "@/components/ui/reusable/Button";
 import { ImageQR } from "@/components/client/ImageQR";
+import { useSearchParams, useRouter } from "next/navigation";
 
-type Props = {
-	handleQrCodeIdAction: (qrCodeId: string | null) => void;
-};
-
-export const QrForm: FC<Props> = ({ handleQrCodeIdAction }) => {
+export const QrForm: FC = () => {
+	const router = useRouter();
+	const searchParams = useSearchParams();
 	const [qrCodeId, setQrCodeId] = useState<string | null>(null);
+
 	const { data, isLoading } = useGetQrCode(qrCodeId, "json");
+
+	useEffect(() => {
+		if (!qrCodeId) return;
+		const params = new URLSearchParams(searchParams.toString());
+		params.set("id", qrCodeId);
+
+		router.push(`?${params.toString()}`);
+	}, [qrCodeId]);
+
 	return (
 		<div>
 			<FormContext
@@ -21,7 +30,6 @@ export const QrForm: FC<Props> = ({ handleQrCodeIdAction }) => {
 				defaultValues={data?.data ?? defaultValues}
 				onSubmit={(values) => {
 					setQrCodeId(values.qrCode);
-					handleQrCodeIdAction(values.qrCode);
 				}}
 			>
 				{(control) => (

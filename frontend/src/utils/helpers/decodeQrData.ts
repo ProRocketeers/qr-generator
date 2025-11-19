@@ -1,13 +1,14 @@
-import { isUrlForm, isEmailForm, Forms } from "@/utils/types";
+import { FORM_TYPE } from "../consts/consts";
+import { Forms } from "../types";
+import { decodeEmailFormData } from "./decodeEmailFormData";
+import { decodeUrlFormData } from "./decodeUrlFormData";
 
-export function decodeQrData<T extends keyof Forms>(data: unknown, type: T): Forms[T] | undefined {
-	if (type === "email" && isEmailForm(data)) {
-		return data as Forms[T];
+export function decodeQrData<T extends FORM_TYPE>(type: T, data: string): Forms[T] {
+	switch (type) {
+		case "email":
+			return decodeEmailFormData(data) as Forms[T];
+
+		case "url":
+			return decodeUrlFormData(data) as Forms[T];
 	}
-
-	if (type === "url" && isUrlForm(data)) {
-		return data as Forms[T];
-	}
-
-	return undefined;
 }

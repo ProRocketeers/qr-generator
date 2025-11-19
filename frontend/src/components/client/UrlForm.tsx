@@ -6,26 +6,24 @@ import { defaultValues, schema } from "@/utils/schemas/urlSchema";
 import { Button } from "@/components/ui/reusable/Button";
 import { ImageQR } from "./ImageQR";
 import { useGenerateQrCode, useGetQrCode } from "@/hooks/api/qr";
-import { decodeQrData } from "../../utils/helpers/decodeQrData";
+import { decodeQrData } from "@/utils/helpers/decodeQrData";
+import { useGetIdParam } from "@/hooks/useGetIdParam";
 
 type Props = {
 	action: ReturnType<typeof useGenerateQrCode>["mutate"];
 	isPending: boolean;
 	response: ReturnType<typeof useGenerateQrCode>["data"];
-	qrCodeId: string | null;
 };
 
-export const UrlForm: FC<Props> = ({ action, isPending, response, qrCodeId }) => {
-	const { data } = useGetQrCode(qrCodeId, "json");
-	console.log("Begore Decoded QR dataURLForm:", data?.data);
-	const decoded = decodeQrData(data?.data, "url");
-	console.log("After Decoded QR dataURLForm:", decoded);
+export const UrlForm: FC<Props> = ({ action, isPending, response }) => {
+	const qrCodeId = useGetIdParam();
+	const { data } = useGetQrCode(qrCodeId, "text");
 
 	return (
 		<div>
 			<FormContext
 				schema={schema}
-				defaultValues={defaultValues}
+				defaultValues={decodeQrData("url", data?.data) || defaultValues}
 				onSubmit={(formValues) => {
 					action({ data: formValues.url, output: "json" });
 				}}

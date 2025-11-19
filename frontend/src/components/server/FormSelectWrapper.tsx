@@ -1,32 +1,45 @@
 "use client";
 
-import { getForm, type FormType } from "@/utils/helpers/getFormsMap";
+import { getForm, FormType } from "@/utils/helpers/getFormsMap";
 import { SelectTypeForm } from "@/components/client/SelectTypeForm";
 import { QrForm } from "@/components/client/QrForm";
 import { useGenerateQrCode } from "@/hooks/api/qr";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { Button } from "@/components/ui/reusable/Button";
 
 type Props = {
 	type: FormType;
 };
 
 export const FormSelectWrapper: FC<Props> = ({ type }) => {
-	const { mutate, isPending, data: response } = useGenerateQrCode();
-
+	const searchParams = useSearchParams();
+	const router = useRouter();
 	const [qrCodeId, setQrCodeId] = useState<string | null>(null);
-
+	const { mutate, isPending, data: response } = useGenerateQrCode();
 	const FormComponent = getForm(type);
 
-	const handleQrCodeId = (qrCodeId: string | null) => {
-		setQrCodeId(qrCodeId);
+	useEffect(() => {
+		const id = searchParams.get("id");
+		if (id) {
+			setQrCodeId(id);
+		}
+	}, [searchParams]);
+
+	const handleCleareParams = () => {
+		const params = new URLSearchParams(searchParams.toString());
+		params.delete("id");
+		router.push(`?${params.toString()}`);
+		setQrCodeId(null);
 	};
 
 	return (
 		<>
-			<SelectTypeForm initialType={type} />
+			<Button onClick={handleCleareParams}>Select new QR type</Button>
+			{!qrCodeId && <SelectTypeForm initialType={type} />}
 			<div className="flex flex-row gap-4">
-				<FormComponent action={mutate} isPending={isPending} response={response} qrCodeId={qrCodeId} />
-				<QrForm handleQrCodeIdAction={handleQrCodeId} />
+				<FormComponent action={mutate} isPending={isPending} response={response} />
+				<QrForm />
 			</div>
 		</>
 	);
