@@ -1,76 +1,264 @@
-import { Body, Controller, Get, Param, Post, Query, Res } from '@nestjs/common'
-import { ApiTags, ApiOkResponse, ApiProduces, ApiParam, ApiQuery, ApiCreatedResponse } from '@nestjs/swagger'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Res,
+} from '@nestjs/common'
+import {
+  ApiTags,
+  ApiOkResponse,
+  ApiProduces,
+  ApiParam,
+  ApiCreatedResponse,
+  ApiOperation,
+} from '@nestjs/swagger'
 import { Response } from 'express'
-import { CreateQrDto, OutputType } from '@backend/qr/dto/create-qr.dto'
-import { QrCodeStyleService } from '@backend/qr/qr.service'
+import { QrEntityService } from '@backend/qr/qrEntity.service'
+import svgToPng from '@backend/helpers/svgToPng'
+import svgToBase64 from '@backend/helpers/svgToBase64'
+import cleanSvg from '@backend/helpers/cleanSvg'
+import {
+  CreateQrRequestDto,
+  CreateQrResponseDto,
+} from '@backend/qr/dto/index.dto'
+import { QrCodeService } from '@backend/qr/qrCode.service'
 
 @ApiTags('QR')
 @Controller('api/v1/qr')
 export class QrController {
-  constructor(private readonly service: QrCodeStyleService) {}
+  constructor(
+    private readonly qrEntityService: QrEntityService,
+    private readonly qrCodeService: QrCodeService,
+  ) {}
 
-  private async svgToPng(svg: string): Promise<Buffer> {
-    try {
-      const mod: any = await import('sharp')
-      const sharpFn = mod.default || mod
-      return await sharpFn(Buffer.from(svg, 'utf8')).png().toBuffer()
-    } catch (e) {
-      throw new Error('PNG conversion failed: ' + (e as Error).message)
-    }
+  @Get('/svg')
+  @ApiOperation({
+    summary: 'Get QR code as SVG',
+    description:
+      'Generates a QR code SVG based on the provided data without storing it.',
+  })
+  @ApiProduces('image/svg+xml')
+  @ApiOkResponse({ description: 'Get QR code as SVG' })
+  async getSvgFromData(@Body() dto: CreateQrRequestDto, @Res() res: Response) {
+    const { type, data } = dto
+    const svg = await this.qrCodeService.create(type, data)
+
+    res.type('image/svg+xml; charset=utf-8')
+
+    return res.send(cleanSvg(svg))
+  }
+
+  @Get('/png')
+  @ApiOperation({
+    summary: 'Get QR code as PNG',
+    description:
+      'Generates a QR code PNG image based on the provided data without storing it.',
+  })
+  @ApiProduces('image/png')
+  @ApiOkResponse({ description: 'Get QR code as PNG' })
+  async getPngFromData(@Body() dto: CreateQrRequestDto, @Res() res: Response) {
+    const { type, data } = dto
+    const svg = await this.qrCodeService.create(type, data)
+    const pngBuffer = await svgToPng(cleanSvg(svg))
+
+    res.type('image/png')
+
+    return res.send(pngBuffer)
+  }
+
+  @Get('/base64')
+  @ApiOperation({
+    summary: 'Get QR code as Base64-encoded SVG',
+    description:
+      'Generates a QR code SVG encoded in Base64 format based on the provided data without storing it.',
+  })
+  @ApiProduces('text/plain')
+  @ApiOkResponse({ description: 'Get QR code as Base64-encoded SVG' })
+  async getBase64FromData(
+    @Body() dto: CreateQrRequestDto,
+    @Res() res: Response,
+  ) {
+    const { type, data } = dto
+    const svg = await this.qrCodeService.create(type, data)
+    const base64 = svgToBase64(cleanSvg(svg))
+
+    res.type('text/plain; charset=utf-8')
+
+    return res.send(base64)
   }
 
   @Post()
-  @ApiCreatedResponse({ description: 'Create new QR code' })
-  async create(@Body() dto: CreateQrDto, @Res() res: Response) {
-    const { data, output = 'svg' } = dto
-    const { code } = await this.service.create(data)
+  @ApiOperation({
+    summary: 'Create new QR code',
+    description: 'Creates a new QR code entity with the provided data.',
+  })
+  @ApiCreatedResponse({
+    description: 'Create new QR code',
+    type: CreateQrResponseDto,
+  })
+  async create(@Body() dto: CreateQrRequestDto, @Res() res: Response) {
+    const { type, data } = dto
+    const { code } = await this.qrEntityService.create(type, data)
 
-    return this.get(code, output, res)
+    res.setHeader('X-QR-Code-ID', code)
+
+    return res.status(201).json({ code })
   }
 
   @Get(':code')
-  @ApiParam({ name: 'code', description: 'ID kódu (např. QRAB12)' })
-  @ApiQuery({
-    name: 'output',
-    required: false,
-    enum: ['png', 'svg', 'dataUri', 'base64', 'json'],
-    description: 'Optional response format',
+  @ApiOperation({
+    summary: 'Get existing QR code',
+    description: 'Returns the QR code entity identified by the provided code.',
   })
-  @ApiProduces('application/json', 'image/svg+xml', 'image/png', 'text/plain')
-  @ApiOkResponse({ description: 'Get existing QR code' })
-  async get(@Param('code') code: string, @Query('output') output: OutputType, @Res() res: Response) {
-    const { data, svg, createdAt = new Date() } = await this.service.findOne(code)
+  @ApiParam({
+    name: 'code',
+    description: 'ID kódu (např. QRAB12)',
+    example: 'QRAB12',
+  })
+  @ApiProduces('application/json')
+  @ApiOkResponse({
+    description: 'Get existing QR code entity',
+    type: CreateQrResponseDto,
+  })
+  async get(@Param('code') code: string, @Res() res: Response) {
+    const { type, data, createdAt, updatedAt } =
+      await this.qrEntityService.findOne(code)
 
-    const base64 = Buffer.from(svg, 'utf8').toString('base64')
     res.setHeader('X-QR-Code-ID', code)
 
-    if (output === 'svg') {
-      res.type('image/svg+xml; charset=utf-8')
-      return res.send(svg)
-    }
-
-    if (output === 'png') {
-      const pngBuffer = await this.svgToPng(svg)
-      res.type('image/png')
-      return res.send(pngBuffer)
-    }
-
-    if (output === 'base64') {
-      res.type('text/plain; charset=utf-8')
-      return res.send(base64)
-    }
-
-    if (output === 'dataUri') {
-      return res.json({ id: code, dataUri: 'data:image/svg+xml;base64,' + base64 })
-    }
-
-    // default output === JSON
     return res.json({
-      id: code,
-      svg,
+      code,
+      type,
       data,
-      base64,
       createdAt,
+      updatedAt,
     })
+  }
+
+  @Put(':code')
+  @ApiOperation({
+    summary: 'Update existing QR code',
+    description: 'Updates the QR code entity identified by the provided code.',
+  })
+  @ApiParam({
+    name: 'code',
+    description: 'ID kódu (např. QRAB12)',
+    example: 'QRAB12',
+  })
+  @ApiOkResponse({
+    description: 'Update existing QR code entity',
+    type: CreateQrResponseDto,
+  })
+  async update(
+    @Param('code') code: string,
+    @Body() dto: CreateQrRequestDto,
+    @Res() res: Response,
+  ) {
+    const { type, data } = dto
+    const { createdAt, updatedAt } = await this.qrEntityService.update(
+      code,
+      type,
+      data,
+    )
+
+    res.setHeader('X-QR-Code-ID', code)
+
+    return res.json({
+      code,
+      type,
+      data,
+      createdAt,
+      updatedAt,
+    })
+  }
+
+  @Delete(':code')
+  @ApiOperation({
+    summary: 'Delete existing QR code',
+    description: 'Deletes the QR code entity identified by the provided code.',
+  })
+  @ApiParam({
+    name: 'code',
+    description: 'ID kódu (např. QRAB12)',
+    example: 'QRAB12',
+  })
+  @ApiOkResponse({ description: 'Delete existing QR code' })
+  async delete(@Param('code') code: string, @Res() res: Response) {
+    await this.qrEntityService.delete(code)
+
+    res.setHeader('X-QR-Code-ID', code)
+
+    return res.status(204).send()
+  }
+
+  @Get(':code/svg')
+  @ApiParam({
+    name: 'code',
+    description: 'ID kódu (např. QRAB12)',
+    example: 'QRAB12',
+  })
+  @ApiProduces('image/svg+xml')
+  @ApiOperation({
+    summary: 'Get QR code as SVG',
+    description: 'Returns the QR code SVG from existing QR code data.',
+  })
+  @ApiOkResponse({ description: 'Get existing QR code as SVG' })
+  async getSvg(@Param('code') code: string, @Res() res: Response) {
+    const { svg } = await this.qrEntityService.findOne(code)
+
+    res.type('image/svg+xml; charset=utf-8')
+    res.setHeader('X-QR-Code-ID', code)
+
+    return res.send(cleanSvg(svg))
+  }
+
+  @Get(':code/png')
+  @ApiOperation({
+    summary: 'Get QR code as PNG',
+    description:
+      'Returns the QR code as a PNG image generated from existing QR code data.',
+  })
+  @ApiParam({
+    name: 'code',
+    description: 'ID kódu (např. QRAB12)',
+    example: 'QRAB12',
+  })
+  @ApiProduces('image/png')
+  @ApiOkResponse({ description: 'Get existing QR code as PNG' })
+  async getPng(@Param('code') code: string, @Res() res: Response) {
+    const { svg } = await this.qrEntityService.findOne(code)
+    const pngBuffer = await svgToPng(cleanSvg(svg))
+
+    res.type('image/png')
+    res.setHeader('X-QR-Code-ID', code)
+
+    return res.send(pngBuffer)
+  }
+
+  @Get(':code/base64')
+  @ApiOperation({
+    summary: 'Get QR code as Base64-encoded SVG',
+    description:
+      'Returns the QR code SVG encoded in Base64 format from existing QR code data.',
+  })
+  @ApiParam({
+    name: 'code',
+    description: 'ID kódu (např. QRAB12)',
+    example: 'QRAB12',
+  })
+  @ApiProduces('text/plain')
+  @ApiOkResponse({ description: 'Get existing QR code as Base64-encoded SVG' })
+  async getBase64(@Param('code') code: string, @Res() res: Response) {
+    const { svg } = await this.qrEntityService.findOne(code)
+    const base64 = svgToBase64(cleanSvg(svg))
+
+    res.type('text/plain; charset=utf-8')
+    res.setHeader('X-QR-Code-ID', code)
+
+    return res.send(base64)
   }
 }

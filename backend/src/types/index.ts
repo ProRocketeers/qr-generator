@@ -1,0 +1,18 @@
+export enum QrType {
+  Text = 'text',
+  Link = 'link',
+  Email = 'email',
+  Call = 'call',
+  SMS = 'sms',
+  WiFi = 'wifi',
+  Geo = 'geo',
+  Event = 'event',
+  Contact = 'contact',
+  PaymentSEPA = 'sepa',
+  PaymentSPD = 'spd',
+  OTPAuth = 'otpauth',
+  // APP = 'app',
+  // Whatsapp = 'whatsapp',
+  // Instagram = 'instagram',
+  // Facebook = 'facebook',
+}

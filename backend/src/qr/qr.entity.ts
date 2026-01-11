@@ -1,21 +1,32 @@
-import { Entity, PrimaryKey, Property, Unique, Index } from '@mikro-orm/core';
+import { QrType } from '@backend/types'
+import {
+  Entity,
+  PrimaryKey,
+  Property,
+  Unique,
+  Index,
+  Enum,
+} from '@mikro-orm/core'
 
 @Entity({ tableName: 'qr_codes' })
 export class QrEntity {
   @PrimaryKey()
-  id!: number;
-
-  @Property()
   @Unique()
   @Index()
-  code!: string;
+  code!: string
 
-  @Property()
-  data!: string;
+  @Enum(() => QrType)
+  type!: QrType
+
+  @Property({ type: 'json', columnType: 'jsonb' })
+  data!: unknown
 
   @Property({ columnType: 'text' })
-  svg!: string;
+  svg!: string
 
   @Property({ defaultRaw: 'now()' })
-  createdAt?: Date;
+  createdAt?: Date
+
+  @Property({ onUpdate: () => new Date() })
+  updatedAt?: Date
 }

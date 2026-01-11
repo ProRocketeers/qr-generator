@@ -2,14 +2,16 @@ import '../polyfills/dom-env'
 import { Seeder } from '@mikro-orm/seeder'
 import { EntityManager } from '@mikro-orm/postgresql'
 import { QrEntity } from '@backend/qr/qr.entity'
+import { QrType } from '@backend/types'
 
 export class SeedQrSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
-    const code = 'QRSEED'
+    const code = 'QRAB12'
     const existing = await em.findOne(QrEntity, { code })
     if (existing) return
 
-    const data = 'https://www.prorocketeers.com/'
+    const type = QrType.Link
+    const data = { url: 'https://www.prorocketeers.com/' }
     const svg = `
       <?xml version="1.0" standalone="no"?>
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
@@ -463,6 +465,7 @@ export class SeedQrSeeder extends Seeder {
 
     const entity = em.create(QrEntity, {
       code,
+      type,
       data,
       svg,
     })

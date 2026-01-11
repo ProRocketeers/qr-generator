@@ -33,12 +33,15 @@ if (!(globalThis as any).window) {
 
   // createElementNS fallback pokud by knihovna volala
   if (!(win.document as any).createElementNS) {
-    ;(win.document as any).createElementNS = (_ns: string, tag: string) => win.document.createElement(tag)
+    ;(win.document as any).createElementNS = (_ns: string, tag: string) =>
+      win.document.createElement(tag)
   }
 
   // requestAnimationFrame stub (někdy vyžadováno)
   if (!(globalThis as any).requestAnimationFrame) {
-    setGlobal('requestAnimationFrame', (cb: Function) => setTimeout(() => cb(Date.now()), 16))
+    setGlobal('requestAnimationFrame', (cb: Function) =>
+      setTimeout(() => cb(Date.now()), 16),
+    )
   }
   if (!(globalThis as any).cancelAnimationFrame) {
     setGlobal('cancelAnimationFrame', (id: any) => clearTimeout(id))
