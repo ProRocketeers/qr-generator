@@ -1,5 +1,5 @@
-import { HealthResponse } from '@backend/health/healthResponse.dto';
-import { Controller, Get } from '@nestjs/common';
+import { HealthResponse } from '@backend/health/healthResponse.dto'
+import { Controller, Get } from '@nestjs/common'
 
 @Controller({ version: '1', path: 'health' })
 export class HealthController {
@@ -7,6 +7,6 @@ export class HealthController {
   get(): HealthResponse {
     return {
       status: 'ok',
-    };
+    }
   }
 }

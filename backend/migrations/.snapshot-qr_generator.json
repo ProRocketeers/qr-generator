@@ -6,15 +6,6 @@
   "tables": [
     {
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "unsigned": false,
-          "autoincrement": true,
-          "primary": true,
-          "nullable": false,
-          "mappedType": "integer"
-        },
         "code": {
           "name": "code",
           "type": "varchar(255)",
@@ -25,15 +16,37 @@
           "length": 255,
           "mappedType": "string"
         },
-        "data": {
-          "name": "data",
-          "type": "varchar(255)",
+        "type": {
+          "name": "type",
+          "type": "text",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "length": 255,
-          "mappedType": "string"
+          "enumItems": [
+            "text",
+            "link",
+            "email",
+            "call",
+            "sms",
+            "wifi",
+            "geo",
+            "event",
+            "contact",
+            "sepa",
+            "spd",
+            "otpauth"
+          ],
+          "mappedType": "enum"
+        },
+        "data": {
+          "name": "data",
+          "type": "jsonb",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "json"
         },
         "svg": {
           "name": "svg",
@@ -54,6 +67,16 @@
           "length": 6,
           "default": "now()",
           "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 6,
+          "mappedType": "datetime"
         }
       },
       "name": "qr_codes",
@@ -70,19 +93,9 @@
           "unique": false
         },
         {
-          "columnNames": [
-            "code"
-          ],
-          "composite": false,
-          "keyName": "qr_codes_code_unique",
-          "constraint": true,
-          "primary": false,
-          "unique": true
-        },
-        {
           "keyName": "qr_codes_pkey",
           "columnNames": [
-            "id"
+            "code"
           ],
           "composite": false,
           "constraint": true,

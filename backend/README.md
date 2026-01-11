@@ -1,3 +1,51 @@
+# TODO
+
+## Prerequisites
+
+deps
+```bash
+pnpm install
+```
+
+db
+
+## Development server
+```bash
+pnpm run start:dev
+```
+
+local: http://localhost:3001 (by ENVs)
+
+pgadmin: http://localhost:5050
+
+email: admin@example.com, password: admin123
+dbUser: postgres, dbPassword: secret
+
+## Database
+
+Create new migration after entity changes:
+```bash
+pnpm db:migration:create
+```
+
+Run migrations, setup database to latest state:
+```bash
+pnpm db:migration:up
+```
+
+seed database with initial data:
+```bash
+pnpm run db:seed
+```
+
+Reset database:
+```bash
+pnpm run db:reset
+```
+
+============================ REMOVE BELOW THIS LINE ============================
+
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
