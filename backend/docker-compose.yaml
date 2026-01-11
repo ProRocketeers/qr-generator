@@ -1,7 +1,7 @@
+name: qr-generator-backend
 services:
   postgres:
     image: postgres:16
-    container_name: qr-generator-postgres
     restart: unless-stopped
     environment:
       POSTGRES_DB: qr_generator
@@ -19,7 +19,6 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4:latest
-    container_name: qr-pgadmin
     restart: unless-stopped
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@example.com
