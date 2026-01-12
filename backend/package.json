@@ -14,7 +14,7 @@
     "db:migration:up": "npx mikro-orm migration:up --config './src/configs/mikro-orm.config.ts",
     "db:fresh": "npx mikro-orm migration:fresh --config './src/configs/mikro-orm.config.ts'",
     "db:fresh:seed": "npx mikro-orm migration:fresh --seed --config './src/configs/mikro-orm.config.ts'",
-    "db:seed": "mikro-orm seeder:run"
+    "db:seed": "npx mikro-orm seeder:run --config './src/configs/mikro-orm.config.ts'"
   },
   "dependencies": {
     "@mikro-orm/core": "^6.5.2",
