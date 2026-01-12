@@ -5,18 +5,27 @@ import { FormContext, InputController } from "@/components/ui/form";
 import { defaultValues, schema } from "@/utils/schemas/urlSchema";
 import { Button } from "@/components/ui/reusable/Button";
 import { ImageQR } from "./ImageQR";
-import { useGenerateQrCode } from "@/hooks/api/qr";
+import { useGenerateQrCode, useGetQrCode } from "@/hooks/api/qr";
+import { decodeQrData } from "@/utils/helpers/decodeQrData";
+import { useGetIdParam } from "@/hooks/useGetIdParam";
 
-export const UrlForm: FC = ({}) => {
-	const { mutate, isPending, data: response } = useGenerateQrCode();
+type Props = {
+	action: ReturnType<typeof useGenerateQrCode>["mutate"];
+	isPending: boolean;
+	response: ReturnType<typeof useGenerateQrCode>["data"];
+};
+
+export const UrlForm: FC<Props> = ({ action, isPending, response }) => {
+	const qrCodeId = useGetIdParam();
+	const { data } = useGetQrCode(qrCodeId, "text");
 
 	return (
 		<div>
 			<FormContext
 				schema={schema}
-				defaultValues={defaultValues}
+				defaultValues={decodeQrData("url", data?.data) || defaultValues}
 				onSubmit={(formValues) => {
-					mutate({ data: formValues.url, output: "json" });
+					action({ data: formValues.url, output: "json" });
 				}}
 			>
 				{(control) => (
@@ -28,7 +37,7 @@ export const UrlForm: FC = ({}) => {
 					</div>
 				)}
 			</FormContext>
-			<ImageQR qrCodeSvg={response?.svg} qrCodeId={response?.code} />
+			<ImageQR qrCodeSvg={response?.svg ?? ""} qrCodeId={response?.id} />
 		</div>
 	);
 };

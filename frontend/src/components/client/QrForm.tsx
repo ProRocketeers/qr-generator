@@ -1,23 +1,35 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useGetQrCode } from "@/hooks/api/qr";
-import { FormContext, InputController } from "../ui/form";
+import { FormContext, InputController } from "@/components/ui/form";
 import { defaultValues, schema } from "@/utils/schemas/qrSchema";
 import { Button } from "@/components/ui/reusable/Button";
 import { ImageQR } from "@/components/client/ImageQR";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export const QrForm: FC = () => {
+	const router = useRouter();
+	const searchParams = useSearchParams();
 	const [qrCodeId, setQrCodeId] = useState<string | null>(null);
-	const { data, isLoading } = useGetQrCode(qrCodeId, "svg");
+
+	const { data, isLoading } = useGetQrCode(qrCodeId, "json");
+
+	useEffect(() => {
+		if (!qrCodeId) return;
+		const params = new URLSearchParams(searchParams.toString());
+		params.set("id", qrCodeId);
+
+		router.push(`?${params.toString()}`);
+	}, [qrCodeId]);
 
 	return (
 		<div>
 			<FormContext
 				schema={schema}
-				defaultValues={defaultValues}
-				onSubmit={(formValues) => {
-					setQrCodeId(formValues.qrCode);
+				defaultValues={data?.data ?? defaultValues}
+				onSubmit={(values) => {
+					setQrCodeId(values.qrCode);
 				}}
 			>
 				{(control) => (
@@ -34,7 +46,7 @@ export const QrForm: FC = () => {
 
 			{data && (
 				<div className="mt-4">
-					<ImageQR qrCodeSvg={data} title="QR Code from DB" />
+					<ImageQR qrCodeSvg={data.svg} title="QR Code from DB" />
 				</div>
 			)}
 		</div>

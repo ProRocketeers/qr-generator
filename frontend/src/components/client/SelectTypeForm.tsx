@@ -1,8 +1,8 @@
 "use client";
 import { FC } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/reusable/Select";
-import { FORMS_MAP, type FormType } from "@/utils/helpers/getFormsMap";
-import { useRouter } from "next/navigation";
+import { FORMS_MAP, FormType } from "@/utils/helpers/getFormsMap";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type Props = {
 	initialType?: FormType;
@@ -10,6 +10,7 @@ type Props = {
 
 export const SelectTypeForm: FC<Props> = ({ initialType = "url" }) => {
 	const router = useRouter();
+	const searchParams = useSearchParams();
 
 	const selectData = Object.keys(FORMS_MAP).map((key) => ({
 		value: key,
@@ -17,9 +18,9 @@ export const SelectTypeForm: FC<Props> = ({ initialType = "url" }) => {
 	}));
 
 	const handleFormType = (selectedType: string) => {
-		const newParams = new URLSearchParams();
-		newParams.set("type", selectedType);
-		router.push(`?${newParams.toString()}`);
+		const params = new URLSearchParams(searchParams.toString());
+		params.set("type", selectedType);
+		router.push(`?${params.toString()}`);
 	};
 
 	return (

@@ -1,5 +1,5 @@
-import { FormSelectWrapper } from "../components/server/FormSelectWrapper";
-import type { FormType } from "../utils/helpers/getFormsMap";
+import { FormSelectWrapper } from "../components/client/FormSelectWrapper";
+import { FormType } from "../utils/helpers/getFormsMap";
 
 export default async function Home({ searchParams }: { searchParams: { type: FormType } }) {
 	const { type } = await searchParams;

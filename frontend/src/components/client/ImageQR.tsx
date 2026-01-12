@@ -4,9 +4,9 @@ import { FC } from "react";
 import Image from "next/image";
 
 type Props = {
-	qrCodeSvg: string | null;
+	qrCodeSvg: string;
 	title?: string;
-	qrCodeId?: string | null;
+	qrCodeId?: string;
 };
 
 export const ImageQR: FC<Props> = ({ qrCodeSvg, title, qrCodeId }) => {

@@ -15,7 +15,7 @@ export const useGenerateQrCode = () => {
 
 export const useGetQrCode = (qrCodeId: string | null, output: string) => {
 	return useQuery({
-		queryKey: ["qrCode", qrCodeId],
+		queryKey: ["qrCode", qrCodeId, output],
 		queryFn: () => getQrCode(qrCodeId, output),
 		enabled: qrCodeId !== null && qrCodeId.trim().length > 0,
 	});
