@@ -16,11 +16,6 @@ pnpm run start:dev
 
 local: http://localhost:3001 (by ENVs)
 
-pgadmin: http://localhost:5050
-
-email: admin@example.com, password: admin123
-dbUser: postgres, dbPassword: secret
-
 ## Database
 
 Create new migration after entity changes:
@@ -42,6 +37,17 @@ Reset database:
 ```bash
 pnpm run db:reset
 ```
+
+pgAdmin login: http://localhost:5050
+
+email: admin@example.com, password: admin123
+
+server: postgres
+host: postgres
+port: 5432
+maintenanceDB: postgres
+username: postgres
+password: secret
 
 ============================ REMOVE BELOW THIS LINE ============================
 

@@ -10,9 +10,10 @@
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
-    "db:migration:create": "mikro-orm migration:create",
-    "db:migration:up": "mikro-orm migration:up",
-    "db:reset": "mikro-orm migration:fresh",
+    "db:migration:create": "npx mikro-orm migration:create --config './src/configs/mikro-orm.config.ts'",
+    "db:migration:up": "npx mikro-orm migration:up --config './src/configs/mikro-orm.config.ts",
+    "db:fresh": "npx mikro-orm migration:fresh --config './src/configs/mikro-orm.config.ts'",
+    "db:fresh:seed": "npx mikro-orm migration:fresh --seed --config './src/configs/mikro-orm.config.ts'",
     "db:seed": "mikro-orm seeder:run"
   },
   "dependencies": {

@@ -1,5 +1,5 @@
 import { defineConfig } from '@mikro-orm/postgresql'
-import { QrEntity } from './src/qr/qr.entity'
+import { QrEntity } from '../qr/qr.entity'
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection'
 import * as dotenv from 'dotenv'
 
