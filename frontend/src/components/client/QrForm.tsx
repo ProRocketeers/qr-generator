@@ -3,7 +3,7 @@
 import { FC, useEffect, useState } from "react";
 import { useGetQrCode } from "@/hooks/api/qr";
 import { FormContext, InputController } from "@/components/ui/form";
-import { defaultValues, schema } from "@/utils/schemas/qrSchema";
+import { qrDefaultValues, qrSchema } from "@/utils/schemas/qrSchema";
 import { Button } from "@/components/ui/reusable/Button";
 import { ImageQR } from "@/components/client/ImageQR";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -26,8 +26,8 @@ export const QrForm: FC = () => {
 	return (
 		<div>
 			<FormContext
-				schema={schema}
-				defaultValues={data?.data ?? defaultValues}
+				schema={qrSchema}
+				defaultValues={data?.data ?? qrDefaultValues}
 				onSubmit={(values) => {
 					setQrCodeId(values.qrCode);
 				}}

@@ -1,9 +1,9 @@
 import z from "zod";
 
-export const schema = z.object({
+export const qrSchema = z.object({
 	qrCode: z.string().min(1, { message: "Code is required" }),
 });
 
-export const defaultValues = {
+export const qrDefaultValues = {
 	qrCode: "",
 };

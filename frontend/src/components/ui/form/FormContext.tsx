@@ -1,13 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReactNode } from "react";
-import {
-	FormProvider,
-	useForm,
-	DefaultValues,
-	type SubmitHandler,
-	type Control,
-	type UseFormProps,
-} from "react-hook-form";
+import { FormProvider, useForm, DefaultValues, SubmitHandler, Control, UseFormProps } from "react-hook-form";
 import { z } from "zod";
 
 type Props<T extends z.ZodObject<z.ZodRawShape>> = {

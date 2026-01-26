@@ -1,11 +1,17 @@
 import { UrlForm } from "@/components/client/UrlForm";
 import { EmailForm } from "@/components/client/EmailForm";
+import { urlDefaultValues, urlSchema } from "../schemas/urlSchema";
+import { emailDefaultValues, emailSchema } from "../schemas/emailSchema";
 
-export const FORMS_MAP = {
-	url: UrlForm,
-	email: EmailForm,
+export const formMap = {
+	url: {
+		component: UrlForm,
+		schema: urlSchema,
+	},
+	email: {
+		component: EmailForm,
+		schema: emailSchema,
+	},
 } as const;
 
-export type FormType = keyof typeof FORMS_MAP;
-
-export const getForm = (type?: FormType) => FORMS_MAP[type ?? "url"];
+export type FormType = keyof typeof formMap;
