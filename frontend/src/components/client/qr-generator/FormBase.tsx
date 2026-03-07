@@ -18,13 +18,14 @@ import {
 	SelectQrType,
 	getPayloadPreview,
 } from "@/components/client/qr-generator/form"
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 
 type FormBaseProps = {
 	searchParams?: Record<string, string | string[] | undefined>
 }
 
 export function FormBase({ searchParams }: FormBaseProps) {
+	const locale = useLocale()
 	const t = useTranslations('common')
 	const tValidation = useTranslations('validation')
 	const [svg, setSvg] = useState("")
@@ -62,7 +63,14 @@ export function FormBase({ searchParams }: FormBaseProps) {
 				{t('appDescription')}
 			</p>
 
-			<FormContext schema={schema} defaultValues={effectiveDefaultValues} onSubmit={handleSubmit}>
+			<FormContext
+				key={locale}
+				schema={schema}
+				defaultValues={effectiveDefaultValues}
+				onSubmit={handleSubmit}
+				mode="onChange"
+				reValidateMode="onChange"
+			>
 				{(form) => {
 					const qrType = form.watch("qrType")
 					const formValues = form.watch()

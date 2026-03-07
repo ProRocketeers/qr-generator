@@ -27,12 +27,12 @@ export const FormContext = <T extends z.ZodObject<z.ZodRawShape>>({
 	const form = useForm<z.input<T>, unknown, z.output<T>>({
 		resolver: zodResolver(schema),
 		defaultValues,
+		...formProps,
 	})
 
 	return (
 		<FormProvider {...form}>
 			<form
-				{...formProps}
 				onSubmit={(e) => {
 					e.preventDefault()
 					form.handleSubmit(onSubmit)(e)

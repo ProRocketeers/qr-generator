@@ -12,9 +12,6 @@ import type { QrType, ParserContext } from "./types"
 const typeValidation = (value: string | null): value is QrType =>
 	value === 'url' || value === 'text' || value === 'email' || value === 'wifi' || value === 'event' || value === 'geo' || value === 'contact'
 
-const encryptionValidation = (value: string | null): boolean =>
-	value === 'WEP' || value === 'WPA' || value === 'WPA2' || value === 'WPA3' || value === 'nopass'
-
 const normalizeSearchParams = (searchParams?: Record<string, string | string[] | undefined>): URLSearchParams => {
 	const params = new URLSearchParams()
 
