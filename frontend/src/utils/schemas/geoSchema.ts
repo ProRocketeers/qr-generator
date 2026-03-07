@@ -4,30 +4,9 @@ import z from "zod"
 // Poznámka: Pole jsou optional protože jsou v unified schema se všemi typy
 // Validace povinnosti je řešena v superRefine podle qrType
 export const geoFields = {
-	latitude: z.preprocess(
-		(val) => {
-			if (val === "" || val === undefined || val === null) return undefined
-			if (typeof val === 'number' && isNaN(val)) return undefined
-			return Number(val)
-		},
-		z.number().optional()
-	),
-	longitude: z.preprocess(
-		(val) => {
-			if (val === "" || val === undefined || val === null) return undefined
-			if (typeof val === 'number' && isNaN(val)) return undefined
-			return Number(val)
-		},
-		z.number().optional()
-	),
-	altitude: z.preprocess(
-		(val) => {
-			if (val === "" || val === undefined || val === null) return undefined
-			if (typeof val === 'number' && isNaN(val)) return undefined
-			return Number(val)
-		},
-		z.number().optional()
-	),
+	latitude: z.number().optional(),
+	longitude: z.number().optional(),
+	altitude: z.number().optional(),
 }
 
 // Validace pro Geo pole (latitude a longitude jsou POVINNÉ pro geo typ)

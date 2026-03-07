@@ -13,6 +13,7 @@ export function FieldsGeo() {
 
 	return (
 		<div className="grid gap-3">
+			{/* Avoid NaN from empty number inputs so schema can show required-field errors */}
 			<div className="grid gap-2">
 				<label className="text-sm font-medium text-slate-700" htmlFor="latitude">
 					{t('latitudeLabel')}
@@ -24,7 +25,9 @@ export function FieldsGeo() {
 					min="-90"
 					max="90"
 					placeholder={t('latitudePlaceholder')}
-					{...register("latitude", { valueAsNumber: true })}
+					{...register("latitude", {
+						setValueAs: (value) => value === "" ? undefined : Number(value),
+					})}
 					className="h-10 rounded-md border border-slate-300 px-3 text-sm"
 				/>
 				{errors.latitude && <p className="text-sm text-red-600">{errors.latitude.message}</p>}
@@ -41,7 +44,9 @@ export function FieldsGeo() {
 					min="-180"
 					max="180"
 					placeholder={t('longitudePlaceholder')}
-					{...register("longitude", { valueAsNumber: true })}
+					{...register("longitude", {
+						setValueAs: (value) => value === "" ? undefined : Number(value),
+					})}
 					className="h-10 rounded-md border border-slate-300 px-3 text-sm"
 				/>
 				{errors.longitude && <p className="text-sm text-red-600">{errors.longitude.message}</p>}
@@ -56,7 +61,9 @@ export function FieldsGeo() {
 					type="number"
 					step="0.1"
 					placeholder={t('altitudePlaceholder')}
-					{...register("altitude", { valueAsNumber: true })}
+					{...register("altitude", {
+						setValueAs: (value) => value === "" ? undefined : Number(value),
+					})}
 					className="h-10 rounded-md border border-slate-300 px-3 text-sm"
 				/>
 				{errors.altitude && <p className="text-sm text-red-600">{errors.altitude.message}</p>}
