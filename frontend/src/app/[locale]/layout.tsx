@@ -35,9 +35,10 @@ export default async function RootLayout({
 	params: Promise<{ locale: string }>
 }>) {
 	const { locale } = await params
+	type SupportedLocale = (typeof routing.locales)[number]
 
 	// Ensure that the incoming `locale` is valid
-	if (!routing.locales.includes(locale as any)) {
+	if (!routing.locales.includes(locale as SupportedLocale)) {
 		notFound()
 	}
 

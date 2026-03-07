@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/reusable/Button"
 import Image from "next/image"
 import { useState, useMemo } from "react"
 import { FormContext } from "@/components/ui/form"
-import { createSchema, defaultValues, type FormValues } from "@/utils/schemas/baseSchema"
+import { createSchema, type FormValues } from "@/utils/schemas/baseSchema"
 import { parseFormDefaultsFromSearchParams } from "@/utils/qrFormDefaults"
 import { useGenerateQrSvg } from "@/hooks/api/qr"
 import {
