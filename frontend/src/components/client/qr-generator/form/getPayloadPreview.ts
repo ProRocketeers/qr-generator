@@ -1,4 +1,4 @@
-import type { FormValues } from "@/utils/schemas/formSelectWrapperSchema"
+import type { FormValues } from "@/utils/schemas/baseSchema"
 
 export function getPayloadPreview(formValues: FormValues) {
 	switch (formValues.qrType) {

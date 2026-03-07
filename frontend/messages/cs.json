@@ -7,7 +7,7 @@
 		"download": "Stáhnout SVG",
 		"error": "Generování QR selhalo. Zkontroluj, že backend běží na API_URL.",
 		"payloadTitle": "Payload odeslaný na backend",
-		"noQrYet": "Zatím nic. Vyplň formulář a klikni na Vygenerovat QR.",
+		"noQrYet": "Vyplň formulář a klikni na Vygenerovat QR.",
 		"qrAlt": "Vygenerovaný QR kód"
 	},
 	"qrTypes": {

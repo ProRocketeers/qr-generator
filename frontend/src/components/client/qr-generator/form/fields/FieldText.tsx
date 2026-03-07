@@ -1,7 +1,7 @@
 "use client"
 
 import { useFormContext } from "react-hook-form"
-import type { FormValues } from "@/utils/schemas/formSelectWrapperSchema"
+import type { FormValues } from "@/utils/schemas/baseSchema"
 import { useTranslations } from 'next-intl'
 
 export function FieldText() {

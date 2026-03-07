@@ -7,7 +7,7 @@
 		"download": "Download SVG",
 		"error": "QR generation failed. Check that backend is running on API_URL.",
 		"payloadTitle": "Payload sent to backend",
-		"noQrYet": "Nothing yet. Fill in the form and click Generate QR.",
+		"noQrYet": "Fill in the form and click Generate QR.",
 		"qrAlt": "Generated QR code"
 	},
 	"qrTypes": {
