@@ -13,8 +13,10 @@ import {
 	SelectQrType,
 	getPayloadPreview,
 } from "@/components/client/qr-generator/form"
+import { useTranslations } from 'next-intl'
 
 export function FormBase() {
+	const t = useTranslations('common')
 	const [svg, setSvg] = useState("")
 	const [error, setError] = useState("")
 	const { mutateAsync: generateQrSvg, isPending } = useGenerateQrSvg()
@@ -27,7 +29,7 @@ export function FormBase() {
 			const nextSvg = await generateQrSvg(payloadPreview)
 			setSvg(nextSvg)
 		} catch {
-			setError("Generovani QR selhalo. Zkontroluj, ze backend bezi na API_URL.")
+			setError(t('error'))
 		}
 	}
 
@@ -36,9 +38,9 @@ export function FormBase() {
 
 	return (
 		<div className="w-full max-w-4xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-			<h1 className="text-2xl font-semibold text-slate-900">🚀 QR Generator</h1>
+			<h1 className="text-2xl font-semibold text-slate-900">🚀 {t('appTitle')}</h1>
 			<p className="mt-2 text-sm text-slate-600">
-				Vyber typ, vypln formular a vygeneruj QR kod pres backend API.
+				{t('appDescription')}
 			</p>
 
 			<FormContext schema={schema} defaultValues={defaultValues} onSubmit={handleSubmit}>
@@ -58,7 +60,7 @@ export function FormBase() {
 
 								<div className="flex items-center gap-3">
 									<Button type="submit" variant="secondary" disabled={isPending}>
-										{isPending ? "Generuji..." : "Vygenerovat QR"}
+										{isPending ? t('generating') : t('generate')}
 									</Button>
 									{canDownload && (
 										<a
@@ -66,7 +68,7 @@ export function FormBase() {
 											download={`qr-${qrType}.svg`}
 											className="rounded-md border border-slate-300 px-4 py-2 text-sm text-slate-700"
 										>
-											Stahnout SVG
+											{t('download')}
 										</a>
 									)}
 								</div>
@@ -77,7 +79,7 @@ export function FormBase() {
 							<div className="mt-8 grid gap-4 md:grid-cols-2">
 								<div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
 									<h2 className="text-sm font-semibold text-slate-700">
-										Payload odeslany na backend
+										{t('payloadTitle')}
 									</h2>
 									<pre className="mt-2 overflow-x-auto text-xs text-slate-600">
 										{JSON.stringify(payloadPreview, null, 2)}
@@ -88,7 +90,7 @@ export function FormBase() {
 									{svg ? (
 										<Image
 											src={imageSource}
-											alt="Vygenerovany QR kod"
+											alt={t('qrAlt')}
 											width={288}
 											height={288}
 											unoptimized
@@ -96,7 +98,7 @@ export function FormBase() {
 										/>
 									) : (
 										<p className="text-sm text-slate-500">
-											Zatim nic. Vypln formular a klikni na Vygenerovat QR.
+											{t('noQrYet')}
 										</p>
 									)}
 								</div>

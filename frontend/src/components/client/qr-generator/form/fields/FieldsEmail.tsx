@@ -2,23 +2,25 @@
 
 import { useFormContext } from "react-hook-form"
 import type { FormValues } from "@/utils/schemas/formSelectWrapperSchema"
+import { useTranslations } from 'next-intl'
 
 export function FieldsEmail() {
 	const {
 		register,
 		formState: { errors },
 	} = useFormContext<FormValues>()
+	const t = useTranslations('form')
 
 	return (
 		<div className="grid gap-3">
 			<div className="grid gap-2">
 				<label className="text-sm font-medium text-slate-700" htmlFor="email-to">
-					To
+					{t('emailToLabel')}
 				</label>
 				<input
 					id="email-to"
 					type="email"
-					placeholder="john@example.com"
+					placeholder={t('emailToPlaceholder')}
 					{...register("to")}
 					className="h-10 rounded-md border border-slate-300 px-3 text-sm"
 				/>
@@ -26,12 +28,12 @@ export function FieldsEmail() {
 			</div>
 			<div className="grid gap-2">
 				<label className="text-sm font-medium text-slate-700" htmlFor="email-subject">
-					Subject
+					{t('emailSubjectLabel')}
 				</label>
 				<input
 					id="email-subject"
 					type="text"
-					placeholder="Predmet"
+					placeholder={t('emailSubjectPlaceholder')}
 					{...register("subject")}
 					className="h-10 rounded-md border border-slate-300 px-3 text-sm"
 				/>
@@ -39,12 +41,12 @@ export function FieldsEmail() {
 			</div>
 			<div className="grid gap-2">
 				<label className="text-sm font-medium text-slate-700" htmlFor="email-body">
-					Body
+					{t('emailBodyLabel')}
 				</label>
 				<textarea
 					id="email-body"
 					rows={4}
-					placeholder="Obsah zpravy"
+					placeholder={t('emailBodyPlaceholder')}
 					{...register("body")}
 					className="rounded-md border border-slate-300 p-3 text-sm"
 				/>

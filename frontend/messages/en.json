@@ -1,0 +1,40 @@
+{
+	"common": {
+		"appTitle": "QR Generator",
+		"appDescription": "Select type, fill in the form and generate QR code via backend API.",
+		"generate": "Generate QR",
+		"generating": "Generating...",
+		"download": "Download SVG",
+		"error": "QR generation failed. Check that backend is running on API_URL.",
+		"payloadTitle": "Payload sent to backend",
+		"noQrYet": "Nothing yet. Fill in the form and click Generate QR.",
+		"qrAlt": "Generated QR code"
+	},
+	"qrTypes": {
+		"url": "URL",
+		"text": "Text",
+		"email": "Email"
+	},
+	"form": {
+		"selectType": "QR Code Type",
+		"urlLabel": "URL",
+		"urlPlaceholder": "https://example.com",
+		"textLabel": "Text",
+		"textPlaceholder": "E.g. Hello world",
+		"emailToLabel": "To",
+		"emailToPlaceholder": "john@example.com",
+		"emailSubjectLabel": "Subject",
+		"emailSubjectPlaceholder": "Subject",
+		"emailBodyLabel": "Message",
+		"emailBodyPlaceholder": "Message content"
+	},
+	"validation": {
+		"urlRequired": "URL is required",
+		"urlInvalid": "Invalid URL",
+		"textRequired": "Text is required",
+		"emailRequired": "Email (to) is required",
+		"emailInvalid": "Invalid email",
+		"subjectRequired": "Subject is required",
+		"bodyRequired": "Message content is required"
+	}
+}

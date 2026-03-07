@@ -1,0 +1,40 @@
+{
+	"common": {
+		"appTitle": "QR Generator",
+		"appDescription": "Vyber typ, vyplň formulář a vygeneruj QR kód přes backend API.",
+		"generate": "Vygenerovat QR",
+		"generating": "Generuji...",
+		"download": "Stáhnout SVG",
+		"error": "Generování QR selhalo. Zkontroluj, že backend běží na API_URL.",
+		"payloadTitle": "Payload odeslaný na backend",
+		"noQrYet": "Zatím nic. Vyplň formulář a klikni na Vygenerovat QR.",
+		"qrAlt": "Vygenerovaný QR kód"
+	},
+	"qrTypes": {
+		"url": "URL",
+		"text": "Text",
+		"email": "Email"
+	},
+	"form": {
+		"selectType": "Typ QR kódu",
+		"urlLabel": "URL",
+		"urlPlaceholder": "https://example.com",
+		"textLabel": "Text",
+		"textPlaceholder": "Např. Ahoj světe",
+		"emailToLabel": "Komu (To)",
+		"emailToPlaceholder": "john@example.com",
+		"emailSubjectLabel": "Předmět",
+		"emailSubjectPlaceholder": "Předmět",
+		"emailBodyLabel": "Zpráva",
+		"emailBodyPlaceholder": "Obsah zprávy"
+	},
+	"validation": {
+		"urlRequired": "URL je povinné",
+		"urlInvalid": "Neplatná URL",
+		"textRequired": "Text je povinný",
+		"emailRequired": "Email (to) je povinný",
+		"emailInvalid": "Neplatný email",
+		"subjectRequired": "Předmět je povinný",
+		"bodyRequired": "Obsah zprávy je povinný"
+	}
+}
