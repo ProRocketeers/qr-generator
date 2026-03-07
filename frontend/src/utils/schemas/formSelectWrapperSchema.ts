@@ -1,85 +1,35 @@
 import z from "zod"
+import { urlFields, validateUrlFields, urlDefaultValues } from "./urlSchema"
+import { textFields, validateTextFields, textDefaultValues } from "./textSchema"
+import { emailFields, validateEmailFields, emailDefaultValues } from "./emailSchema"
 
+// Spojení všech polí do jednoho schématu
 export const schema = z
 	.object({
 		qrType: z.enum(["url", "text", "email"]),
-		url: z.string().optional(),
-		text: z.string().optional(),
-		to: z.string().optional(),
-		subject: z.string().optional(),
-		body: z.string().optional(),
+		...urlFields,
+		...textFields,
+		...emailFields,
 	})
 	.superRefine((data, ctx) => {
+		// Validace podle typu QR kódu
 		if (data.qrType === "url") {
-			if (!data.url || data.url.trim() === "") {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					message: "URL je povinne",
-					path: ["url"],
-				})
-			} else {
-				try {
-					new URL(data.url)
-				} catch {
-					ctx.addIssue({
-						code: z.ZodIssueCode.custom,
-						message: "Neplatna URL",
-						path: ["url"],
-					})
-				}
-			}
-		}
-
-		if (data.qrType === "text") {
-			if (!data.text || data.text.trim() === "") {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					message: "Text je povinny",
-					path: ["text"],
-				})
-			}
-		}
-
-		if (data.qrType === "email") {
-			if (!data.to || data.to.trim() === "") {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					message: "Email (to) je povinny",
-					path: ["to"],
-				})
-			} else if (!z.string().email().safeParse(data.to).success) {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					message: "Neplatny email",
-					path: ["to"],
-				})
-			}
-
-			if (!data.subject || data.subject.trim() === "") {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					message: "Predmet je povinny",
-					path: ["subject"],
-				})
-			}
-
-			if (!data.body || data.body.trim() === "") {
-				ctx.addIssue({
-					code: z.ZodIssueCode.custom,
-					message: "Obsah zpravy je povinny",
-					path: ["body"],
-				})
-			}
+			validateUrlFields(data, ctx)
+		} else if (data.qrType === "text") {
+			validateTextFields(data, ctx)
+		} else if (data.qrType === "email") {
+			validateEmailFields(data, ctx)
 		}
 	})
 
-export type FormValues = z.infer<typeof schema>;
+export type FormValues = z.infer<typeof schema>
 
-export const defaultValues: FormValues = {
-	qrType: "url",
-	url: "",
-	text: "",
-	to: "",
-	subject: "",
-	body: "",
+// Výchozí hodnoty pro každý typ
+export const defaultValuesByType = {
+	url: { qrType: "url" as const, ...urlDefaultValues, ...textDefaultValues, ...emailDefaultValues },
+	text: { qrType: "text" as const, ...urlDefaultValues, ...textDefaultValues, ...emailDefaultValues },
+	email: { qrType: "email" as const, ...urlDefaultValues, ...textDefaultValues, ...emailDefaultValues },
 }
+
+// Výchozí hodnoty - defaultně URL
+export const defaultValues: FormValues = defaultValuesByType.url
