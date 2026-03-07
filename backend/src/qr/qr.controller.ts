@@ -1,29 +1,21 @@
 import {
   Body,
   Controller,
-  Delete,
-  Get,
-  Param,
   Post,
-  Put,
   Res,
 } from '@nestjs/common'
 import {
   ApiTags,
-  ApiOkResponse,
   ApiProduces,
-  ApiParam,
   ApiCreatedResponse,
   ApiOperation,
 } from '@nestjs/swagger'
 import { Response } from 'express'
-import { QrEntityService } from '@backend/qr/qrEntity.service'
 import svgToPng from '@backend/helpers/svgToPng'
 import svgToBase64 from '@backend/helpers/svgToBase64'
 import cleanSvg from '@backend/helpers/cleanSvg'
 import {
   CreateQrRequestDto,
-  CreateQrResponseDto,
 } from '@backend/qr/dto/index.dto'
 import { QrCodeService } from '@backend/qr/qrCode.service'
 
@@ -31,7 +23,6 @@ import { QrCodeService } from '@backend/qr/qrCode.service'
 @Controller('api/v1/qr')
 export class QrController {
   constructor(
-    private readonly qrEntityService: QrEntityService,
     private readonly qrCodeService: QrCodeService,
   ) {}
 
