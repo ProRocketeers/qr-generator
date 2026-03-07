@@ -3,7 +3,7 @@
 import { useFormContext } from "react-hook-form"
 import type { FormValues } from "@/utils/schemas/formSelectWrapperSchema"
 
-export function EmailFields() {
+export function FieldsEmail() {
 	const {
 		register,
 		formState: { errors },

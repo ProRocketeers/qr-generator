@@ -1,5 +1,5 @@
-export { EmailFields } from "./fields/EmailFields"
+export { FieldsEmail as EmailFields } from "./fields/EmailFields"
 export { QrTypeSelect } from "./QrTypeSelect"
-export { TextField } from "./fields/TextField"
-export { UrlField } from "./fields/UrlField"
+export { FieldText as TextField } from "./fields/TextField"
+export { FieldUrl as UrlField } from "./fields/UrlField"
 export { getPayloadPreview } from "./getPayloadPreview"
