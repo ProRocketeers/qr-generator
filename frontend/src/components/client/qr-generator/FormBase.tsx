@@ -12,6 +12,9 @@ import {
 	FieldText,
 	FieldUrl,
 	FieldsWifi,
+	FieldsEvent,
+	FieldsGeo,
+	FieldsContact,
 	SelectQrType,
 	getPayloadPreview,
 } from "@/components/client/qr-generator/form"
@@ -66,6 +69,9 @@ export function FormBase() {
 								{qrType === "text" && <FieldText />}
 								{qrType === "email" && <FieldsEmail />}
 								{qrType === "wifi" && <FieldsWifi />}
+								{qrType === "event" && <FieldsEvent />}
+								{qrType === "geo" && <FieldsGeo />}
+								{qrType === "contact" && <FieldsContact />}
 
 								<div className="flex items-center gap-3">
 									<Button type="submit" variant="secondary" disabled={isPending}>

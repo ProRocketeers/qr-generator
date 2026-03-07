@@ -4,10 +4,13 @@ import { parseUrlType } from "./url"
 import { parseTextType } from "./text"
 import { parseEmailType } from "./email"
 import { parseWifiType } from "./wifi"
+import { parseEventType } from "./event"
+import { parseGeoType } from "./geo"
+import { parseContactType } from "./contact"
 import type { QrType, ParserContext } from "./types"
 
 const typeValidation = (value: string | null): value is QrType =>
-	value === 'url' || value === 'text' || value === 'email' || value === 'wifi'
+	value === 'url' || value === 'text' || value === 'email' || value === 'wifi' || value === 'event' || value === 'geo' || value === 'contact'
 
 const encryptionValidation = (value: string | null): boolean =>
 	value === 'WEP' || value === 'WPA' || value === 'WPA2' || value === 'WPA3' || value === 'nopass'
@@ -43,6 +46,15 @@ export const parseFormDefaultsFromUrl = (): FormValues => {
 			break
 		case 'wifi':
 			parseWifiType(ctx)
+			break
+		case 'event':
+			parseEventType(ctx)
+			break
+		case 'geo':
+			parseGeoType(ctx)
+			break
+		case 'contact':
+			parseContactType(ctx)
 			break
 	}
 

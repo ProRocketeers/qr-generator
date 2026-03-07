@@ -43,6 +43,9 @@ export function SelectQrType() {
 				<option value="text">{tTypes('text')}</option>
 				<option value="email">{tTypes('email')}</option>
 				<option value="wifi">{tTypes('wifi')}</option>
+				<option value="event">{tTypes('event')}</option>
+				<option value="geo">{tTypes('geo')}</option>
+				<option value="contact">{tTypes('contact')}</option>
 			</select>
 		</div>
 	)
