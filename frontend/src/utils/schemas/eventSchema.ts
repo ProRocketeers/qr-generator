@@ -1,6 +1,8 @@
 import z from "zod"
 
 // Základní shape pro Event typ
+// Poznámka: Pole jsou optional protože jsou v unified schema se všemi typy
+// Validace povinnosti je řešena v superRefine podle qrType
 export const eventFields = {
 	eventTitle: z.string().optional(),
 	eventDescription: z.string().optional(),
@@ -11,7 +13,7 @@ export const eventFields = {
 	eventUrl: z.string().optional(),
 }
 
-// Validace pro Event pole
+// Validace pro Event pole (eventTitle a eventStart jsou POVINNÉ pro event typ)
 export const createValidateEventFields = (t: (key: string) => string) => (
 	data: { eventTitle?: string; eventStart?: string },
 	ctx: z.RefinementCtx

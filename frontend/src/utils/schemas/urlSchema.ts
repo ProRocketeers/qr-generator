@@ -1,11 +1,13 @@
 import z from "zod"
 
 // Základní shape pro URL typ
+// Poznámka: Pole jsou optional protože jsou v unified schema se všemi typy
+// Validace povinnosti je řešena v superRefine podle qrType
 export const urlFields = {
 	url: z.string().optional(),
 }
 
-// Validace pro URL pole
+// Validace pro URL pole (url je POVINNÉ pro url typ)
 export const createValidateUrlFields = (t: (key: string) => string) => (
 	data: { url?: string },
 	ctx: z.RefinementCtx

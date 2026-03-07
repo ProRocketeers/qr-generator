@@ -1,13 +1,15 @@
 import z from "zod"
 
 // Základní shape pro Email typ
+// Poznámka: Pole jsou optional protože jsou v unified schema se všemi typy
+// Validace povinnosti je řešena v superRefine podle qrType
 export const emailFields = {
 	to: z.string().optional(),
 	subject: z.string().optional(),
 	body: z.string().optional(),
 }
 
-// Validace pro Email pole
+// Validace pro Email pole (to, subject, body jsou POVINNÉ pro email typ)
 export const createValidateEmailFields = (t: (key: string) => string) => (
 	data: { to?: string; subject?: string; body?: string },
 	ctx: z.RefinementCtx

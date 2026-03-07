@@ -1,18 +1,41 @@
 import z from "zod"
 
 // Základní shape pro Geo typ
+// Poznámka: Pole jsou optional protože jsou v unified schema se všemi typy
+// Validace povinnosti je řešena v superRefine podle qrType
 export const geoFields = {
-	latitude: z.number().optional(),
-	longitude: z.number().optional(),
-	altitude: z.number().optional(),
+	latitude: z.preprocess(
+		(val) => {
+			if (val === "" || val === undefined || val === null) return undefined
+			if (typeof val === 'number' && isNaN(val)) return undefined
+			return Number(val)
+		},
+		z.number().optional()
+	),
+	longitude: z.preprocess(
+		(val) => {
+			if (val === "" || val === undefined || val === null) return undefined
+			if (typeof val === 'number' && isNaN(val)) return undefined
+			return Number(val)
+		},
+		z.number().optional()
+	),
+	altitude: z.preprocess(
+		(val) => {
+			if (val === "" || val === undefined || val === null) return undefined
+			if (typeof val === 'number' && isNaN(val)) return undefined
+			return Number(val)
+		},
+		z.number().optional()
+	),
 }
 
-// Validace pro Geo pole
+// Validace pro Geo pole (latitude a longitude jsou POVINNÉ pro geo typ)
 export const createValidateGeoFields = (t: (key: string) => string) => (
 	data: { latitude?: number; longitude?: number },
 	ctx: z.RefinementCtx
 ) => {
-	if (data.latitude === undefined || data.latitude === null) {
+	if (data.latitude === undefined) {
 		ctx.addIssue({
 			code: z.ZodIssueCode.custom,
 			message: t('latitudeRequired'),
@@ -26,7 +49,7 @@ export const createValidateGeoFields = (t: (key: string) => string) => (
 		})
 	}
 
-	if (data.longitude === undefined || data.longitude === null) {
+	if (data.longitude === undefined) {
 		ctx.addIssue({
 			code: z.ZodIssueCode.custom,
 			message: t('longitudeRequired'),

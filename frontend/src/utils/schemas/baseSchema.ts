@@ -53,15 +53,28 @@ export const schema = createSchema((key) => key)
 
 export type FormValues = z.infer<typeof schema>
 
+// Společné výchozí hodnoty pro všechna pole
+const allDefaultValues = {
+	...urlDefaultValues,
+	...textDefaultValues,
+	...emailDefaultValues,
+	...wifiDefaultValues,
+	...eventDefaultValues,
+	...geoDefaultValues,
+	...contactDefaultValues,
+}
+
+type QrType = "url" | "text" | "email" | "wifi" | "event" | "geo" | "contact"
+
 // Výchozí hodnoty pro každý typ
-export const defaultValuesByType = {
-	url: { qrType: "url" as const, ...urlDefaultValues, ...textDefaultValues, ...emailDefaultValues, ...wifiDefaultValues, ...eventDefaultValues, ...geoDefaultValues, ...contactDefaultValues },
-	text: { qrType: "text" as const, ...urlDefaultValues, ...textDefaultValues, ...emailDefaultValues, ...wifiDefaultValues, ...eventDefaultValues, ...geoDefaultValues, ...contactDefaultValues },
-	email: { qrType: "email" as const, ...urlDefaultValues, ...textDefaultValues, ...emailDefaultValues, ...wifiDefaultValues, ...eventDefaultValues, ...geoDefaultValues, ...contactDefaultValues },
-	wifi: { qrType: "wifi" as const, ...urlDefaultValues, ...textDefaultValues, ...emailDefaultValues, ...wifiDefaultValues, ...eventDefaultValues, ...geoDefaultValues, ...contactDefaultValues },
-	event: { qrType: "event" as const, ...urlDefaultValues, ...textDefaultValues, ...emailDefaultValues, ...wifiDefaultValues, ...eventDefaultValues, ...geoDefaultValues, ...contactDefaultValues },
-	geo: { qrType: "geo" as const, ...urlDefaultValues, ...textDefaultValues, ...emailDefaultValues, ...wifiDefaultValues, ...eventDefaultValues, ...geoDefaultValues, ...contactDefaultValues },
-	contact: { qrType: "contact" as const, ...urlDefaultValues, ...textDefaultValues, ...emailDefaultValues, ...wifiDefaultValues, ...eventDefaultValues, ...geoDefaultValues, ...contactDefaultValues },
+export const defaultValuesByType: Record<QrType, FormValues> = {
+	url: { qrType: "url", ...allDefaultValues },
+	text: { qrType: "text", ...allDefaultValues },
+	email: { qrType: "email", ...allDefaultValues },
+	wifi: { qrType: "wifi", ...allDefaultValues },
+	event: { qrType: "event", ...allDefaultValues },
+	geo: { qrType: "geo", ...allDefaultValues },
+	contact: { qrType: "contact", ...allDefaultValues },
 }
 
 // Výchozí hodnoty - defaultně URL
