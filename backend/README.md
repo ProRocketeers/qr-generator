@@ -1,152 +1,190 @@
-# TODO
+# Backend - QR Generator
 
-## Prerequisites
+NestJS backend pro generovani QR kodu, jejich renderovani (SVG/PNG/Base64) a volitelne ulozeni do PostgreSQL.
 
-deps
+## Co backend umi
+
+- Vygenerovat QR kod z payloadu bez ulozeni (`/api/v1/qr/svg`, `/api/v1/qr/png`, `/api/v1/qr/base64`).
+- Ulozit QR kod do DB a vratit kratky kod (napr. `QRAB12`).
+- Nacist, upravit a smazat ulozeny QR kod.
+- Vratit ulozeny QR kod jako SVG/PNG/Base64.
+- Poskytnout Swagger dokumentaci.
+
+## Tech stack
+
+- Node.js + NestJS
+- MikroORM + PostgreSQL
+- Swagger (`@nestjs/swagger`)
+- `qr-code-styling`, `qrcode`, `sharp`
+
+## Rychly start
+
+1. Nainstaluj dependencies:
+
 ```bash
 pnpm install
 ```
 
-db
+2. Priprav env:
 
-## Development server
 ```bash
-pnpm run start:dev
+cp .env.example .env
 ```
 
-local: http://localhost:3001 (by ENVs)
+3. Spust infrastrukturu (Postgres + pgAdmin):
 
-## Database
-
-Create new migration after entity changes:
 ```bash
-pnpm db:migration:create
+docker compose up -d
 ```
 
-Run migrations, setup database to latest state:
+4. Proved migrace:
+
 ```bash
+pnpm db:migration:create   # jen pokud jsi menil entity
 pnpm db:migration:up
 ```
 
-seed database with initial data:
-```bash
-pnpm run db:seed
-```
-
-Reset database:
-```bash
-pnpm run db:reset
-```
-
-pgAdmin login: http://localhost:5050
-
-email: admin@example.com, password: admin123
-
-server: postgres
-host: postgres
-port: 5432
-maintenanceDB: postgres
-username: postgres
-password: secret
-
-============================ REMOVE BELOW THIS LINE ============================
-
-
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
+5. (Volitelne) napln seed data:
 
 ```bash
-$ pnpm install
+pnpm db:seed
 ```
 
-## Compile and run the project
+6. Spust backend:
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+pnpm start:dev
 ```
 
-## Run tests
+Default local URL je [http://localhost:3001](http://localhost:3001) a pgAdmin bezi na [http://localhost:5050](http://localhost:5050) (dle `.env.example`).
+
+## Env promenne
+
+Pouzite promenne (viz `.env.example`):
+
+```env
+PORT=3001
+BASE_PATH=
+DB_HOST=localhost
+DB_PORT=5436
+DB_NAME=qr_generator
+DB_USER=postgres
+DB_PASSWORD=secret
+DB_SSL=false
+```
+
+Poznamka: `BASE_PATH` se aktualne pouziva pro Swagger server metadata, ne pro global prefix rout.
+
+## Docker a pgAdmin
+
+- PostgreSQL: `localhost:5436`
+- pgAdmin: [http://localhost:5050](http://localhost:5050)
+- pgAdmin login:
+  - email: `admin@example.com`
+  - password: `admin123`
+- Pri registraci serveru v pgAdmin:
+  - host: `postgres`
+  - port: `5432`
+  - database: `qr_generator`
+  - username: `postgres`
+  - password: `secret`
+
+## API prehled
+
+### Health
+
+- `GET /health` -> `{ "status": "ok" }`
+
+### QR bez ulozeni (render z payloadu)
+
+- `GET /api/v1/qr/svg`
+- `GET /api/v1/qr/png`
+- `GET /api/v1/qr/base64`
+
+Body ma tvar:
+
+```json
+{
+  "type": "text",
+  "data": "Hello World"
+}
+```
+
+Poznamka: endpointy pouzivaji `GET` s body (tak je to implementovano v kontroleru).
+
+### QR s ulozenim (entity)
+
+- `POST /api/v1/qr` - vytvori zaznam, vraci `{ code }`
+- `GET /api/v1/qr/:code` - vrati ulozenou entitu
+- `PUT /api/v1/qr/:code` - prepise `type` + `data` + `svg`
+- `DELETE /api/v1/qr/:code` - smaze zaznam (`204`)
+- `GET /api/v1/qr/:code/svg`
+- `GET /api/v1/qr/:code/png`
+- `GET /api/v1/qr/:code/base64`
+
+U entity endpointu backend nastavuje response header `X-QR-Code-ID`.
+
+## Podporovane typy `type`
+
+- `text`
+- `link`
+- `email`
+- `call`
+- `sms`
+- `wifi`
+- `geo`
+- `event`
+- `contact`
+- `sepa`
+- `spd`
+- `otpauth`
+
+### Minimalni payload priklady
+
+```json
+{ "type": "text", "data": "Ahoj" }
+{ "type": "link", "data": { "url": "https://example.com" } }
+{ "type": "email", "data": { "to": "john@example.com" } }
+{ "type": "call", "data": { "phone": "+420123456789" } }
+{ "type": "sms", "data": { "phone": "+420123456789", "body": "Ahoj" } }
+{ "type": "wifi", "data": { "ssid": "OfficeWiFi", "password": "secret", "encryption": "WPA2" } }
+{ "type": "geo", "data": { "latitude": 50.087, "longitude": 14.421 } }
+{ "type": "event", "data": { "title": "Meeting", "start": "2026-03-07T12:00:00Z" } }
+{ "type": "contact", "data": { "firstName": "John", "lastName": "Doe" } }
+{ "type": "sepa", "data": { "name": "Company s.r.o.", "iban": "CZ6508000000192000145399" } }
+{ "type": "spd", "data": { "accountName": "Company s.r.o.", "iban": "CZ6508000000192000145399" } }
+{ "type": "otpauth", "data": { "type": "totp", "label": "john@example.com", "secret": "BASE32SECRET" } }
+```
+
+## Validace a chovani
+
+- Globalni `ValidationPipe`: `whitelist: true`, `forbidNonWhitelisted: true`.
+- `type` je enum; vychozi hodnota je `text`.
+- Pro `type=text` je `data` string, pro ostatni typy objekt.
+- Pri nenalezeni kodu backend vraci chybu (`ConflictException`).
+
+## Swagger
+
+- UI: [http://localhost:3001/swagger](http://localhost:3001/swagger)
+- YAML: [http://localhost:3001/swagger/yaml](http://localhost:3001/swagger/yaml)
+
+## Databaze prikazy
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+pnpm db:migration:create
+pnpm db:migration:up
+pnpm db:fresh
+pnpm db:fresh:seed
+pnpm db:seed
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Uzitecne skripty
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+pnpm build
+pnpm start
+pnpm start:dev
+pnpm start:prod
+pnpm lint
+pnpm test
 ```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
