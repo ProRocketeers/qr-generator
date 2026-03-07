@@ -4,6 +4,7 @@
 		"appDescription": "Vyber typ, vyplň formulář a vygeneruj QR kód přes backend API.",
 		"generate": "Vygenerovat QR",
 		"generating": "Generuji...",
+		"reset": "Resetovat",
 		"download": "Stáhnout SVG",
 		"error": "Generování QR selhalo. Zkontroluj, že backend běží na API_URL.",
 		"payloadTitle": "Payload odeslaný na backend",

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/reusable/Button"
 import Image from "next/image"
 import { useState, useMemo } from "react"
 import { FormContext } from "@/components/ui/form"
-import { createSchema, type FormValues } from "@/utils/schemas/baseSchema"
+import { createSchema, type FormValues, defaultValuesByType } from "@/utils/schemas/baseSchema"
 import { parseFormDefaultsFromSearchParams } from "@/utils/qrFormDefaults"
 import { useGenerateQrSvg } from "@/hooks/api/qr"
 import {
@@ -19,6 +19,8 @@ import {
 	getPayloadPreview,
 } from "@/components/client/qr-generator/form"
 import { useLocale, useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation'
+import { Download, RotateCcw } from 'lucide-react'
 
 type FormBaseProps = {
 	searchParams?: Record<string, string | string[] | undefined>
@@ -26,6 +28,7 @@ type FormBaseProps = {
 
 export function FormBase({ searchParams }: FormBaseProps) {
 	const locale = useLocale()
+	const router = useRouter()
 	const t = useTranslations('common')
 	const tValidation = useTranslations('validation')
 	const [svg, setSvg] = useState("")
@@ -76,6 +79,15 @@ export function FormBase({ searchParams }: FormBaseProps) {
 					const formValues = form.watch()
 					const payloadPreview = getPayloadPreview(formValues)
 
+					const handleReset = () => {
+						const currentType = form.getValues('qrType')
+						form.reset(defaultValuesByType[currentType])
+						setSvg("")
+						setError("")
+						// Clear URL params except qrType
+						router.replace(`/${locale}?type=${currentType}`)
+					}
+
 					return (
 						<>
 							<div className="mt-6 grid gap-4">
@@ -97,11 +109,21 @@ export function FormBase({ searchParams }: FormBaseProps) {
 										<a
 											href={imageSource}
 											download={`qr-${qrType}.svg`}
-											className="rounded-md border border-slate-300 px-4 py-2 text-sm text-slate-700"
+											className="flex items-center gap-2 rounded-md border border-slate-300 px-4 py-2 text-sm text-slate-700 transition-colors hover:bg-slate-50"
 										>
+											<Download className="h-4 w-4" />
 											{t('download')}
 										</a>
 									)}
+									<Button
+										type="button"
+										variant="outline"
+										onClick={handleReset}
+										className="ml-auto border-red-300 text-red-600 hover:bg-red-50 hover:text-red-700"
+									>
+										<RotateCcw className="h-4 w-4" />
+										{t('reset')}
+									</Button>
 								</div>
 
 								{error && <p className="text-sm text-red-600">{error}</p>}

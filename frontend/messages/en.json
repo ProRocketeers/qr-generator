@@ -4,6 +4,7 @@
 		"appDescription": "Select type, fill in the form and generate QR code via backend API.",
 		"generate": "Generate QR",
 		"generating": "Generating...",
+		"reset": "Reset",
 		"download": "Download SVG",
 		"error": "QR generation failed. Check that backend is running on API_URL.",
 		"payloadTitle": "Payload sent to backend",
