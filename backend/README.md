@@ -97,9 +97,9 @@ Poznamka: `BASE_PATH` se aktualne pouziva pro Swagger server metadata, ne pro gl
 
 ### QR bez ulozeni (render z payloadu)
 
-- `GET /api/v1/qr/svg`
-- `GET /api/v1/qr/png`
-- `GET /api/v1/qr/base64`
+- `POST /api/v1/qr/svg` -> vrati SVG (`201`)
+- `POST /api/v1/qr/png` -> vrati PNG buffer (`201`)
+- `POST /api/v1/qr/base64` -> vrati Base64 string (`201`)
 
 Body ma tvar:
 
@@ -109,8 +109,6 @@ Body ma tvar:
   "data": "Hello World"
 }
 ```
-
-Poznamka: endpointy pouzivaji `GET` s body (tak je to implementovano v kontroleru).
 
 ### QR s ulozenim (entity)
 

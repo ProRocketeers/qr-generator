@@ -35,49 +35,49 @@ export class QrController {
     private readonly qrCodeService: QrCodeService,
   ) {}
 
-  @Get('/svg')
+  @Post('/svg')
   @ApiOperation({
-    summary: 'Get QR code as SVG',
+    summary: 'Generate QR code as SVG',
     description:
       'Generates a QR code SVG based on the provided data without storing it.',
   })
   @ApiProduces('image/svg+xml')
-  @ApiOkResponse({ description: 'Get QR code as SVG' })
+  @ApiCreatedResponse({ description: 'QR code generated as SVG' })
   async getSvgFromData(@Body() dto: CreateQrRequestDto, @Res() res: Response) {
     const { type, data } = dto
     const svg = await this.qrCodeService.create(type, data)
 
-    res.type('image/svg+xml; charset=utf-8')
+    res.status(201).type('image/svg+xml; charset=utf-8')
 
     return res.send(cleanSvg(svg))
   }
 
-  @Get('/png')
+  @Post('/png')
   @ApiOperation({
-    summary: 'Get QR code as PNG',
+    summary: 'Generate QR code as PNG',
     description:
       'Generates a QR code PNG image based on the provided data without storing it.',
   })
   @ApiProduces('image/png')
-  @ApiOkResponse({ description: 'Get QR code as PNG' })
+  @ApiCreatedResponse({ description: 'QR code generated as PNG' })
   async getPngFromData(@Body() dto: CreateQrRequestDto, @Res() res: Response) {
     const { type, data } = dto
     const svg = await this.qrCodeService.create(type, data)
     const pngBuffer = await svgToPng(cleanSvg(svg))
 
-    res.type('image/png')
+    res.status(201).type('image/png')
 
     return res.send(pngBuffer)
   }
 
-  @Get('/base64')
+  @Post('/base64')
   @ApiOperation({
-    summary: 'Get QR code as Base64-encoded SVG',
+    summary: 'Generate QR code as Base64-encoded SVG',
     description:
       'Generates a QR code SVG encoded in Base64 format based on the provided data without storing it.',
   })
   @ApiProduces('text/plain')
-  @ApiOkResponse({ description: 'Get QR code as Base64-encoded SVG' })
+  @ApiCreatedResponse({ description: 'QR code generated as Base64-encoded SVG' })
   async getBase64FromData(
     @Body() dto: CreateQrRequestDto,
     @Res() res: Response,
@@ -86,7 +86,7 @@ export class QrController {
     const svg = await this.qrCodeService.create(type, data)
     const base64 = svgToBase64(cleanSvg(svg))
 
-    res.type('text/plain; charset=utf-8')
+    res.status(201).type('text/plain; charset=utf-8')
 
     return res.send(base64)
   }
