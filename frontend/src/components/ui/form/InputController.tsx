@@ -1,7 +1,7 @@
-import { type FieldValues } from "react-hook-form";
-import { Input } from "@/components/ui/reusable/Input";
-import { type InputHTMLAttributes } from "react";
-import { FormFieldController, type FormFieldProps } from "./FormFieldController";
+import { type FieldValues } from "react-hook-form"
+import { Input } from "@/components/ui/reusable/Input"
+import { type InputHTMLAttributes } from "react"
+import { FormFieldController, type FormFieldProps } from "./FormFieldController"
 
 type Props<T extends FieldValues> = InputHTMLAttributes<HTMLInputElement> & Omit<FormFieldProps<T>, "children">;
 
@@ -15,11 +15,11 @@ export const InputController = <T extends FieldValues>({ label, control, name, .
 					{...field}
 					{...props}
 					onChange={(e) => {
-						const value = props.type === "number" ? parseFloat(e.target.value) : e.target.value;
-						field.onChange(value);
+						const value = props.type === "number" ? parseFloat(e.target.value) : e.target.value
+						field.onChange(value)
 					}}
 				/>
 			)}
 		</FormFieldController>
-	);
-};
+	)
+}

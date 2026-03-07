@@ -1,22 +1,22 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { QueryProvider } from "../utils/providers/QueryProvider";
+import type { Metadata } from "next"
+import { Geist, Geist_Mono } from "next/font/google"
+import "./globals.css"
+import { QueryProvider } from "../utils/providers/QueryProvider"
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
 	subsets: ["latin"],
-});
+})
 
 const geistMono = Geist_Mono({
 	variable: "--font-geist-mono",
 	subsets: ["latin"],
-});
+})
 
 export const metadata: Metadata = {
 	title: "qr-generator",
 	description: "By ProRocketeers",
-};
+}
 
 export default function RootLayout({
 	children,
@@ -29,5 +29,5 @@ export default function RootLayout({
 				<QueryProvider>{children}</QueryProvider>
 			</body>
 		</html>
-	);
+	)
 }

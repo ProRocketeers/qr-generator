@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react"
+import { useSearchParams } from "next/navigation"
 
 export const useGetIdParam = () => {
-	const [qrCodeId, setQrCodeId] = useState<string | null>(null);
-	const searchParams = useSearchParams();
+	const [qrCodeId, setQrCodeId] = useState<string | null>(null)
+	const searchParams = useSearchParams()
 
 	useEffect(() => {
-		const id = searchParams.get("id");
+		const id = searchParams.get("id")
 		if (id) {
-			setQrCodeId(id);
+			setQrCodeId(id)
 		}
-	}, [searchParams]);
+	}, [searchParams])
 
-	return qrCodeId;
-};
+	return qrCodeId
+}

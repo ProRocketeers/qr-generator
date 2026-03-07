@@ -1,6 +1,6 @@
-import { type ReactNode } from "react";
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./Form";
-import type { Control, ControllerRenderProps, FieldValues, Path } from "react-hook-form";
+import { type ReactNode } from "react"
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./Form"
+import type { Control, ControllerRenderProps, FieldValues, Path } from "react-hook-form"
 
 export type FormFieldProps<T extends FieldValues> = {
 	children: (field: ControllerRenderProps<T>) => ReactNode;
@@ -30,5 +30,5 @@ export const FormFieldController = <T extends FieldValues>({
 				</FormItem>
 			)}
 		/>
-	);
-};
+	)
+}
