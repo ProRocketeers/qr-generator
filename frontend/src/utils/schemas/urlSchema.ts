@@ -19,9 +19,23 @@ export const validateUrlFields = (
 		return
 	}
 
+	// Zkusíme validovat URL - nejdřív jak je, pak s https://
+	let isValid = false
+	
 	try {
 		new URL(data.url)
+		isValid = true
 	} catch {
+		// Zkusíme s přidaným protokolem
+		try {
+			new URL(`https://${data.url}`)
+			isValid = true
+		} catch {
+			// Stále neplatná
+		}
+	}
+
+	if (!isValid) {
 		ctx.addIssue({
 			code: z.ZodIssueCode.custom,
 			message: "Neplatna URL",

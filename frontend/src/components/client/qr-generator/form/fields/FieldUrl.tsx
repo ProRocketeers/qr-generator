@@ -16,7 +16,7 @@ export function FieldUrl() {
 			</label>
 			<input
 				id="url-value"
-				type="url"
+				type="text"
 				placeholder="https://example.com"
 				{...register("url")}
 				className="h-10 rounded-md border border-slate-300 px-3 text-sm"
