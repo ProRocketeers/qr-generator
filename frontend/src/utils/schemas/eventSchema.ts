@@ -12,14 +12,14 @@ export const eventFields = {
 }
 
 // Validace pro Event pole
-export const validateEventFields = (
+export const createValidateEventFields = (t: (key: string) => string) => (
 	data: { eventTitle?: string; eventStart?: string },
 	ctx: z.RefinementCtx
 ) => {
 	if (!data.eventTitle || data.eventTitle.trim() === "") {
 		ctx.addIssue({
 			code: z.ZodIssueCode.custom,
-			message: "Nadpis akce je povinný",
+			message: t('eventTitleRequired'),
 			path: ["eventTitle"],
 		})
 	}
@@ -27,7 +27,7 @@ export const validateEventFields = (
 	if (!data.eventStart || data.eventStart.trim() === "") {
 		ctx.addIssue({
 			code: z.ZodIssueCode.custom,
-			message: "Počáteční čas je povinný",
+			message: t('eventStartRequired'),
 			path: ["eventStart"],
 		})
 	}

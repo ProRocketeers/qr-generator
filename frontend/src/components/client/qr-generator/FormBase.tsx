@@ -2,9 +2,9 @@
 
 import { Button } from "@/components/ui/reusable/Button"
 import Image from "next/image"
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { FormContext } from "@/components/ui/form"
-import { schema, defaultValues, type FormValues } from "@/utils/schemas/baseSchema"
+import { createSchema, defaultValues, type FormValues } from "@/utils/schemas/baseSchema"
 import { parseFormDefaultsFromUrl } from "@/utils/qrFormDefaults"
 import { useGenerateQrSvg } from "@/hooks/api/qr"
 import {
@@ -22,8 +22,12 @@ import { useTranslations } from 'next-intl'
 
 export function FormBase() {
 	const t = useTranslations('common')
+	const tValidation = useTranslations('validation')
 	const [svg, setSvg] = useState("")
 	const [error, setError] = useState("")
+	
+	// Create schema with translations
+	const schema = useMemo(() => createSchema(tValidation), [tValidation])
 	
 	// Initialize default values from URL params immediately
 	const [effectiveDefaultValues] = useState(() => {

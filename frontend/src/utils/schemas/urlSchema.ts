@@ -6,14 +6,14 @@ export const urlFields = {
 }
 
 // Validace pro URL pole
-export const validateUrlFields = (
+export const createValidateUrlFields = (t: (key: string) => string) => (
 	data: { url?: string },
 	ctx: z.RefinementCtx
 ) => {
 	if (!data.url || data.url.trim() === "") {
 		ctx.addIssue({
 			code: z.ZodIssueCode.custom,
-			message: "URL je povinne",
+			message: t('urlRequired'),
 			path: ["url"],
 		})
 		return
@@ -38,7 +38,7 @@ export const validateUrlFields = (
 	if (!isValid) {
 		ctx.addIssue({
 			code: z.ZodIssueCode.custom,
-			message: "Neplatna URL",
+			message: t('urlInvalid'),
 			path: ["url"],
 		})
 	}

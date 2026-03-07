@@ -8,20 +8,20 @@ export const geoFields = {
 }
 
 // Validace pro Geo pole
-export const validateGeoFields = (
+export const createValidateGeoFields = (t: (key: string) => string) => (
 	data: { latitude?: number; longitude?: number },
 	ctx: z.RefinementCtx
 ) => {
 	if (data.latitude === undefined || data.latitude === null) {
 		ctx.addIssue({
 			code: z.ZodIssueCode.custom,
-			message: "Zeměpisná šířka je povinná",
+			message: t('latitudeRequired'),
 			path: ["latitude"],
 		})
 	} else if (data.latitude < -90 || data.latitude > 90) {
 		ctx.addIssue({
 			code: z.ZodIssueCode.custom,
-			message: "Zeměpisná šířka musí být mezi -90 a 90",
+			message: t('latitudeInvalid'),
 			path: ["latitude"],
 		})
 	}
@@ -29,13 +29,13 @@ export const validateGeoFields = (
 	if (data.longitude === undefined || data.longitude === null) {
 		ctx.addIssue({
 			code: z.ZodIssueCode.custom,
-			message: "Zeměpisná délka je povinná",
+			message: t('longitudeRequired'),
 			path: ["longitude"],
 		})
 	} else if (data.longitude < -180 || data.longitude > 180) {
 		ctx.addIssue({
 			code: z.ZodIssueCode.custom,
-			message: "Zeměpisná délka musí být mezi -180 a 180",
+			message: t('longitudeInvalid'),
 			path: ["longitude"],
 		})
 	}

@@ -78,6 +78,13 @@
 		"emailInvalid": "Invalid email",
 		"subjectRequired": "Subject is required",
 		"bodyRequired": "Message content is required",
-		"ssidRequired": "SSID is required"
+		"ssidRequired": "SSID is required",
+		"eventTitleRequired": "Event title is required",
+		"eventStartRequired": "Start time is required",
+		"latitudeRequired": "Latitude is required",
+		"latitudeInvalid": "Latitude must be between -90 and 90",
+		"longitudeRequired": "Longitude is required",
+		"longitudeInvalid": "Longitude must be between -180 and 180",
+		"contactFirstNameRequired": "First name is required"
 	}
 }

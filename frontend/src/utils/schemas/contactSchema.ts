@@ -12,14 +12,14 @@ export const contactFields = {
 }
 
 // Validace pro Contact pole
-export const validateContactFields = (
+export const createValidateContactFields = (t: (key: string) => string) => (
 	data: { contactFirstName?: string },
 	ctx: z.RefinementCtx
 ) => {
 	if (!data.contactFirstName || data.contactFirstName.trim() === "") {
 		ctx.addIssue({
 			code: z.ZodIssueCode.custom,
-			message: "Jméno je povinné",
+			message: t('contactFirstNameRequired'),
 			path: ["contactFirstName"],
 		})
 	}

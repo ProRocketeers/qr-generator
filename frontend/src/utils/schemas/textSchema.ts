@@ -6,14 +6,14 @@ export const textFields = {
 }
 
 // Validace pro Text pole
-export const validateTextFields = (
+export const createValidateTextFields = (t: (key: string) => string) => (
 	data: { text?: string },
 	ctx: z.RefinementCtx
 ) => {
 	if (!data.text || data.text.trim() === "") {
 		ctx.addIssue({
 			code: z.ZodIssueCode.custom,
-			message: "Text je povinny",
+			message: t('textRequired'),
 			path: ["text"],
 		})
 	}

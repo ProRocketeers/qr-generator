@@ -9,14 +9,14 @@ export const wifiFields = {
 }
 
 // Validace pro WiFi pole
-export const validateWifiFields = (
+export const createValidateWifiFields = (t: (key: string) => string) => (
 	data: { ssid?: string; password?: string; encryption?: string; hidden?: boolean },
 	ctx: z.RefinementCtx
 ) => {
 	if (!data.ssid || data.ssid.trim() === "") {
 		ctx.addIssue({
 			code: z.ZodIssueCode.custom,
-			message: "SSID je povinné",
+			message: t('ssidRequired'),
 			path: ["ssid"],
 		})
 	}

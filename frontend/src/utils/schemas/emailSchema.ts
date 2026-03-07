@@ -8,20 +8,20 @@ export const emailFields = {
 }
 
 // Validace pro Email pole
-export const validateEmailFields = (
+export const createValidateEmailFields = (t: (key: string) => string) => (
 	data: { to?: string; subject?: string; body?: string },
 	ctx: z.RefinementCtx
 ) => {
 	if (!data.to || data.to.trim() === "") {
 		ctx.addIssue({
 			code: z.ZodIssueCode.custom,
-			message: "Email (to) je povinny",
+			message: t('emailRequired'),
 			path: ["to"],
 		})
 	} else if (!z.string().email().safeParse(data.to).success) {
 		ctx.addIssue({
 			code: z.ZodIssueCode.custom,
-			message: "Neplatny email",
+			message: t('emailInvalid'),
 			path: ["to"],
 		})
 	}
@@ -29,7 +29,7 @@ export const validateEmailFields = (
 	if (!data.subject || data.subject.trim() === "") {
 		ctx.addIssue({
 			code: z.ZodIssueCode.custom,
-			message: "Predmet je povinny",
+			message: t('subjectRequired'),
 			path: ["subject"],
 		})
 	}
@@ -37,7 +37,7 @@ export const validateEmailFields = (
 	if (!data.body || data.body.trim() === "") {
 		ctx.addIssue({
 			code: z.ZodIssueCode.custom,
-			message: "Obsah zpravy je povinny",
+			message: t('bodyRequired'),
 			path: ["body"],
 		})
 	}

@@ -78,6 +78,13 @@
 		"emailRequired": "Email (to) je povinný",
 		"emailInvalid": "Neplatný email",
 		"subjectRequired": "Předmět je povinný",
-		"bodyRequired": "Obsah zprávy je povinný"
+		"bodyRequired": "Obsah zprávy je povinný",
+		"eventTitleRequired": "Nadpis akce je povinný",
+		"eventStartRequired": "Počáteční čas je povinný",
+		"latitudeRequired": "Zeměpisná šířka je povinná",
+		"latitudeInvalid": "Zeměpisná šířka musí být mezi -90 a 90",
+		"longitudeRequired": "Zeměpisná délka je povinná",
+		"longitudeInvalid": "Zeměpisná délka musí být mezi -180 a 180",
+		"contactFirstNameRequired": "Jméno je povinné"
 	}
 }
