@@ -1,5 +1,6 @@
 export { FieldsEmail } from "./fields/FieldsEmail"
 export { FieldText } from "./fields/FieldText"
 export { FieldUrl } from "./fields/FieldUrl"
+export { FieldsWifi } from "./fields/FieldsWifi"
 export { SelectQrType } from "../SelectQrType"
 export { getPayloadPreview } from "./getPayloadPreview"

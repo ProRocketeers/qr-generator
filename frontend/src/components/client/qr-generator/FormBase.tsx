@@ -5,11 +5,13 @@ import Image from "next/image"
 import { useState } from "react"
 import { FormContext } from "@/components/ui/form"
 import { schema, defaultValues, type FormValues } from "@/utils/schemas/baseSchema"
+import { parseFormDefaultsFromUrl } from "@/utils/qrFormDefaults"
 import { useGenerateQrSvg } from "@/hooks/api/qr"
 import {
 	FieldsEmail,
 	FieldText,
 	FieldUrl,
+	FieldsWifi,
 	SelectQrType,
 	getPayloadPreview,
 } from "@/components/client/qr-generator/form"
@@ -19,6 +21,12 @@ export function FormBase() {
 	const t = useTranslations('common')
 	const [svg, setSvg] = useState("")
 	const [error, setError] = useState("")
+	
+	// Initialize default values from URL params immediately
+	const [effectiveDefaultValues] = useState(() => {
+		return parseFormDefaultsFromUrl()
+	})
+	
 	const { mutateAsync: generateQrSvg, isPending } = useGenerateQrSvg()
 
 	const handleSubmit = async (formValues: FormValues) => {
@@ -43,7 +51,7 @@ export function FormBase() {
 				{t('appDescription')}
 			</p>
 
-			<FormContext schema={schema} defaultValues={defaultValues} onSubmit={handleSubmit}>
+			<FormContext schema={schema} defaultValues={effectiveDefaultValues} onSubmit={handleSubmit}>
 				{(form) => {
 					const qrType = form.watch("qrType")
 					const formValues = form.watch()
@@ -57,6 +65,7 @@ export function FormBase() {
 								{qrType === "url" && <FieldUrl />}
 								{qrType === "text" && <FieldText />}
 								{qrType === "email" && <FieldsEmail />}
+								{qrType === "wifi" && <FieldsWifi />}
 
 								<div className="flex items-center gap-3">
 									<Button type="submit" variant="secondary" disabled={isPending}>

@@ -13,6 +13,16 @@ export function getPayloadPreview(formValues: FormValues) {
 					body: formValues.body,
 				},
 			}
+		case "wifi":
+			return {
+				type: "wifi",
+				data: {
+					ssid: formValues.ssid,
+					password: formValues.password,
+					encryption: formValues.encryption,
+					hidden: formValues.hidden,
+				},
+			}
 		default:
 			return { type: "link", data: { url: formValues.url } }
 	}

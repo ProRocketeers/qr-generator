@@ -13,7 +13,8 @@
 	"qrTypes": {
 		"url": "URL",
 		"text": "Text",
-		"email": "Email"
+		"email": "Email",
+		"wifi": "WiFi"
 	},
 	"form": {
 		"selectType": "QR Code Type",
@@ -26,7 +27,14 @@
 		"emailSubjectLabel": "Subject",
 		"emailSubjectPlaceholder": "Subject",
 		"emailBodyLabel": "Message",
-		"emailBodyPlaceholder": "Message content"
+		"emailBodyPlaceholder": "Message content",
+		"wifiSsidLabel": "Network Name (SSID)",
+		"wifiSsidPlaceholder": "MyWiFi",
+		"wifiPasswordLabel": "Password",
+		"wifiPasswordPlaceholder": "••••••••",
+		"wifiEncryptionLabel": "Security",
+		"wifiEncryptionNone": "None",
+		"wifiHiddenLabel": "Hidden network"
 	},
 	"validation": {
 		"urlRequired": "URL is required",
@@ -35,6 +43,7 @@
 		"emailRequired": "Email (to) is required",
 		"emailInvalid": "Invalid email",
 		"subjectRequired": "Subject is required",
-		"bodyRequired": "Message content is required"
+		"bodyRequired": "Message content is required",
+		"ssidRequired": "SSID is required"
 	}
 }

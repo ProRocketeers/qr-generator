@@ -13,7 +13,8 @@
 	"qrTypes": {
 		"url": "URL",
 		"text": "Text",
-		"email": "Email"
+		"email": "Email",
+		"wifi": "WiFi"
 	},
 	"form": {
 		"selectType": "Typ QR kódu",
@@ -26,9 +27,17 @@
 		"emailSubjectLabel": "Předmět",
 		"emailSubjectPlaceholder": "Předmět",
 		"emailBodyLabel": "Zpráva",
-		"emailBodyPlaceholder": "Obsah zprávy"
+		"emailBodyPlaceholder": "Obsah zprávy",
+		"wifiSsidLabel": "Název sítě (SSID)",
+		"wifiSsidPlaceholder": "MojeWiFi",
+		"wifiPasswordLabel": "Heslo",
+		"wifiPasswordPlaceholder": "••••••••",
+		"wifiEncryptionLabel": "Zabezpečení",
+		"wifiEncryptionNone": "Žádné",
+		"wifiHiddenLabel": "Skrytá síť"
 	},
 	"validation": {
+		"ssidRequired": "SSID je povinné",
 		"urlRequired": "URL je povinné",
 		"urlInvalid": "Neplatná URL",
 		"textRequired": "Text je povinný",
