@@ -15,25 +15,37 @@ const typeValidation = (value: string | null): value is QrType =>
 const encryptionValidation = (value: string | null): boolean =>
 	value === 'WEP' || value === 'WPA' || value === 'WPA2' || value === 'WPA3' || value === 'nopass'
 
-/**
- * Parse URL parameters and return form default values
- * Reads from window.location.search and extracts type-specific field values
- */
-export const parseFormDefaultsFromUrl = (): FormValues => {
-	if (typeof window === 'undefined') return defaultValues
+const normalizeSearchParams = (searchParams?: Record<string, string | string[] | undefined>): URLSearchParams => {
+	const params = new URLSearchParams()
 
-	const params = new URLSearchParams(window.location.search)
+	if (!searchParams) {
+		return params
+	}
+
+	for (const [key, value] of Object.entries(searchParams)) {
+		if (typeof value === 'string') {
+			params.set(key, value)
+		} else if (Array.isArray(value) && value.length > 0) {
+			params.set(key, value[0])
+		}
+	}
+
+	return params
+}
+
+export const parseFormDefaultsFromSearchParams = (
+	searchParams?: Record<string, string | string[] | undefined>
+): FormValues => {
+	const params = normalizeSearchParams(searchParams)
 	const newValues: Partial<FormValues> = { ...defaultValues }
 
 	const ctx: ParserContext = { params, newValues }
 
-	// Parse type
 	const typeFromUrl = params.get('type')
 	if (typeValidation(typeFromUrl)) {
 		ctx.newValues.qrType = typeFromUrl
 	}
 
-	// Parse type-specific fields
 	switch (ctx.newValues.qrType) {
 		case 'url':
 			parseUrlType(ctx)
@@ -59,4 +71,15 @@ export const parseFormDefaultsFromUrl = (): FormValues => {
 	}
 
 	return ctx.newValues as FormValues
+}
+
+/**
+ * Parse URL parameters and return form default values
+ * Reads from window.location.search and extracts type-specific field values
+ */
+export const parseFormDefaultsFromUrl = (): FormValues => {
+	if (typeof window === 'undefined') return defaultValues
+
+	const entries = Object.fromEntries(new URLSearchParams(window.location.search).entries())
+	return parseFormDefaultsFromSearchParams(entries)
 }

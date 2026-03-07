@@ -5,7 +5,7 @@ import Image from "next/image"
 import { useState, useMemo } from "react"
 import { FormContext } from "@/components/ui/form"
 import { createSchema, defaultValues, type FormValues } from "@/utils/schemas/baseSchema"
-import { parseFormDefaultsFromUrl } from "@/utils/qrFormDefaults"
+import { parseFormDefaultsFromSearchParams } from "@/utils/qrFormDefaults"
 import { useGenerateQrSvg } from "@/hooks/api/qr"
 import {
 	FieldsEmail,
@@ -20,7 +20,11 @@ import {
 } from "@/components/client/qr-generator/form"
 import { useTranslations } from 'next-intl'
 
-export function FormBase() {
+type FormBaseProps = {
+	searchParams?: Record<string, string | string[] | undefined>
+}
+
+export function FormBase({ searchParams }: FormBaseProps) {
 	const t = useTranslations('common')
 	const tValidation = useTranslations('validation')
 	const [svg, setSvg] = useState("")
@@ -31,7 +35,7 @@ export function FormBase() {
 	
 	// Initialize default values from URL params immediately
 	const [effectiveDefaultValues] = useState(() => {
-		return parseFormDefaultsFromUrl()
+		return parseFormDefaultsFromSearchParams(searchParams)
 	})
 	
 	const { mutateAsync: generateQrSvg, isPending } = useGenerateQrSvg()
