@@ -3,7 +3,8 @@
 import { useFormContext } from "react-hook-form"
 import type { FormValues } from "@/utils/schemas/baseSchema"
 import { useTranslations } from "next-intl"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { syncQrFieldsInUrl } from "@/components/client/qr-generator/urlSync"
 
 export function FieldsWifi() {
 	const {
@@ -14,7 +15,14 @@ export function FieldsWifi() {
 	const t = useTranslations("form")
 	const [showPassword, setShowPassword] = useState(false)
 
+	const ssid = watch("ssid")
+	const password = watch("password")
 	const encryption = watch("encryption")
+	const hidden = watch("hidden")
+
+	useEffect(() => {
+		syncQrFieldsInUrl("wifi", { ssid, password, encryption, hidden })
+	}, [ssid, password, encryption, hidden])
 
 	return (
 		<div className="grid gap-3">

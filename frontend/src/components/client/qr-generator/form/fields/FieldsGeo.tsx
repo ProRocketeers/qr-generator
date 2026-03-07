@@ -1,15 +1,25 @@
 "use client"
 
 import { useFormContext } from "react-hook-form"
+import { useEffect } from "react"
 import type { FormValues } from "@/utils/schemas/baseSchema"
 import { useTranslations } from 'next-intl'
+import { syncQrFieldsInUrl } from "@/components/client/qr-generator/urlSync"
 
 export function FieldsGeo() {
 	const {
 		register,
 		formState: { errors },
+		watch,
 	} = useFormContext<FormValues>()
 	const t = useTranslations('form')
+	const latitude = watch("latitude")
+	const longitude = watch("longitude")
+	const altitude = watch("altitude")
+
+	useEffect(() => {
+		syncQrFieldsInUrl("geo", { latitude, longitude, altitude })
+	}, [latitude, longitude, altitude])
 
 	const parseOptionalNumber = (value: unknown) => {
 		if (value === "" || value === null || value === undefined) {

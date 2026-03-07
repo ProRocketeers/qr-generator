@@ -4,14 +4,7 @@ import { useFormContext } from "react-hook-form"
 import { useEffect, useRef } from "react"
 import type { FormValues } from "@/utils/schemas/baseSchema"
 import { useTranslations } from 'next-intl'
-
-const updateUrlParam = (key: string, value: string) => {
-	const params = new URLSearchParams(window.location.search)
-	params.set(key, value)
-	const query = params.toString()
-	const href = query ? `${window.location.pathname}?${query}` : window.location.pathname
-	window.history.replaceState(null, "", href)
-}
+import { syncQrTypeInUrl } from "./urlSync"
 
 export function SelectQrType() {
 	const { register, watch } = useFormContext<FormValues>()
@@ -26,7 +19,7 @@ export function SelectQrType() {
 			isFirstRender.current = false
 			return
 		}
-		updateUrlParam('type', qrType)
+		syncQrTypeInUrl(qrType)
 	}, [qrType])
 
 	return (

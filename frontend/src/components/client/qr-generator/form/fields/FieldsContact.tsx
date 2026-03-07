@@ -1,15 +1,37 @@
 "use client"
 
 import { useFormContext } from "react-hook-form"
+import { useEffect } from "react"
 import type { FormValues } from "@/utils/schemas/baseSchema"
 import { useTranslations } from 'next-intl'
+import { syncQrFieldsInUrl } from "@/components/client/qr-generator/urlSync"
 
 export function FieldsContact() {
 	const {
 		register,
 		formState: { errors },
+		watch,
 	} = useFormContext<FormValues>()
 	const t = useTranslations('form')
+	const contactFirstName = watch("contactFirstName")
+	const contactLastName = watch("contactLastName")
+	const contactOrganization = watch("contactOrganization")
+	const contactPhone = watch("contactPhone")
+	const contactEmail = watch("contactEmail")
+	const contactUrl = watch("contactUrl")
+	const contactNote = watch("contactNote")
+
+	useEffect(() => {
+		syncQrFieldsInUrl("contact", {
+			contactFirstName,
+			contactLastName,
+			contactOrganization,
+			contactPhone,
+			contactEmail,
+			contactUrl,
+			contactNote,
+		})
+	}, [contactFirstName, contactLastName, contactOrganization, contactPhone, contactEmail, contactUrl, contactNote])
 
 	return (
 		<div className="grid gap-3">

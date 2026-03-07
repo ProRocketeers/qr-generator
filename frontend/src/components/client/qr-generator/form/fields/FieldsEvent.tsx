@@ -1,15 +1,37 @@
 "use client"
 
 import { useFormContext } from "react-hook-form"
+import { useEffect } from "react"
 import type { FormValues } from "@/utils/schemas/baseSchema"
 import { useTranslations } from 'next-intl'
+import { syncQrFieldsInUrl } from "@/components/client/qr-generator/urlSync"
 
 export function FieldsEvent() {
 	const {
 		register,
 		formState: { errors },
+		watch,
 	} = useFormContext<FormValues>()
 	const t = useTranslations('form')
+	const eventTitle = watch("eventTitle")
+	const eventDescription = watch("eventDescription")
+	const eventLocation = watch("eventLocation")
+	const eventStart = watch("eventStart")
+	const eventEnd = watch("eventEnd")
+	const eventAllDay = watch("eventAllDay")
+	const eventUrl = watch("eventUrl")
+
+	useEffect(() => {
+		syncQrFieldsInUrl("event", {
+			eventTitle,
+			eventDescription,
+			eventLocation,
+			eventStart,
+			eventEnd,
+			eventAllDay,
+			eventUrl,
+		})
+	}, [eventTitle, eventDescription, eventLocation, eventStart, eventEnd, eventAllDay, eventUrl])
 
 	return (
 		<div className="grid gap-3">
