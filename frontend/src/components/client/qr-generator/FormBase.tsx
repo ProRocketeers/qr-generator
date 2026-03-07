@@ -33,15 +33,15 @@ export function FormBase({ searchParams }: FormBaseProps) {
 	const tValidation = useTranslations('validation')
 	const [svg, setSvg] = useState("")
 	const [error, setError] = useState("")
-	
+
 	// Create schema with translations
 	const schema = useMemo(() => createSchema(tValidation), [tValidation])
-	
+
 	// Initialize default values from URL params immediately
 	const [effectiveDefaultValues] = useState(() => {
 		return parseFormDefaultsFromSearchParams(searchParams)
 	})
-	
+
 	const { mutateAsync: generateQrSvg, isPending } = useGenerateQrSvg()
 
 	const handleSubmit = async (formValues: FormValues) => {
@@ -60,106 +60,123 @@ export function FormBase({ searchParams }: FormBaseProps) {
 	const canDownload = Boolean(svg)
 
 	return (
-		<div className="w-full max-w-4xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-			<h1 className="text-2xl font-semibold text-slate-900">🚀 {t('appTitle')}</h1>
-			<p className="mt-2 text-sm text-slate-600">
-				{t('appDescription')}
-			</p>
+		<div className="w-full max-w-4xl">
+			{/* Header with icon and title */}
+			<div className="mb-6 flex flex-col items-center text-center gap-6">
+				<div className="bg-gradient-to-br from-[#051641] to-[#0a3d7a] rounded-2xl w-16 h-16 flex items-center justify-center shadow-md">
+					<Image
+						src="/qr-icon.svg"
+						alt={t('appTitle')}
+						width={96}
+						height={96}
+						className="w-[48px] h-[48px] bg-white rounded-lg p-1"
+					/>
+				</div>
+				<div>
+					<h1 className="text-3xl font-bold text-slate-700">{t('appTitle')}</h1>
+					<p className="mt-2 text-sm text-slate-600 max-w-md">
+						{t('appDescription')}
+					</p>
+				</div>
+			</div>
 
-			<FormContext
-				key={locale}
-				schema={schema}
-				defaultValues={effectiveDefaultValues}
-				onSubmit={handleSubmit}
-				mode="onChange"
-				reValidateMode="onChange"
-			>
-				{(form) => {
-					const qrType = form.watch("qrType")
-					const formValues = form.watch()
-					const payloadPreview = getPayloadPreview(formValues)
+			{/* Form Card */}
+			<div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+				<FormContext
+					key={locale}
+					schema={schema}
+					defaultValues={effectiveDefaultValues}
+					onSubmit={handleSubmit}
+					mode="onChange"
+					reValidateMode="onChange"
+				>
+					{(form) => {
+						const qrType = form.watch("qrType")
+						const formValues = form.watch()
+						const payloadPreview = getPayloadPreview(formValues)
 
-					const handleReset = () => {
-						const currentType = form.getValues('qrType')
-						form.reset(defaultValuesByType[currentType])
-						setSvg("")
-						setError("")
-						// Clear URL params except qrType
-						router.replace(`/${locale}?type=${currentType}`)
-					}
+						const handleReset = () => {
+							const currentType = form.getValues('qrType')
+							form.reset(defaultValuesByType[currentType])
+							setSvg("")
+							setError("")
+							// Clear URL params except qrType
+							router.replace(`/${locale}?type=${currentType}`)
+						}
 
-					return (
-						<>
-							<div className="mt-6 grid gap-4">
-								<SelectQrType />
+						return (
+							<>
+								<div className="mt-6 grid gap-4">
+									<SelectQrType />
 
-								{qrType === "url" && <FieldUrl />}
-								{qrType === "text" && <FieldText />}
-								{qrType === "email" && <FieldsEmail />}
-								{qrType === "wifi" && <FieldsWifi />}
-								{qrType === "event" && <FieldsEvent />}
-								{qrType === "geo" && <FieldsGeo />}
-								{qrType === "contact" && <FieldsContact />}
+									{qrType === "url" && <FieldUrl />}
+									{qrType === "text" && <FieldText />}
+									{qrType === "email" && <FieldsEmail />}
+									{qrType === "wifi" && <FieldsWifi />}
+									{qrType === "event" && <FieldsEvent />}
+									{qrType === "geo" && <FieldsGeo />}
+									{qrType === "contact" && <FieldsContact />}
 
-								<div className="flex items-center gap-3">
-									<Button type="submit" variant="secondary" disabled={isPending}>
-										{isPending ? t('generating') : t('generate')}
-									</Button>
-									{canDownload && (
-										<a
-											href={imageSource}
-											download={`qr-${qrType}.svg`}
-											className="flex items-center gap-2 rounded-md border border-slate-300 px-4 py-2 text-sm text-slate-700 transition-colors hover:bg-slate-50"
+									<div className="flex items-center gap-3">
+										<Button type="submit" variant="secondary" disabled={isPending}>
+											{isPending ? t('generating') : t('generate')}
+										</Button>
+										{canDownload && (
+											<a
+												href={imageSource}
+												download={`qr-${qrType}.svg`}
+												className="flex items-center gap-2 rounded-md border border-slate-300 px-4 py-2 text-sm text-slate-700 transition-colors hover:bg-slate-50"
+											>
+												<Download className="h-4 w-4" />
+												{t('download')}
+											</a>
+										)}
+										<Button
+											type="button"
+											variant="outline"
+											onClick={handleReset}
+											className="ml-auto border-red-300 text-red-600 hover:bg-red-50 hover:text-red-700"
 										>
-											<Download className="h-4 w-4" />
-											{t('download')}
-										</a>
-									)}
-									<Button
-										type="button"
-										variant="outline"
-										onClick={handleReset}
-										className="ml-auto border-red-300 text-red-600 hover:bg-red-50 hover:text-red-700"
-									>
-										<RotateCcw className="h-4 w-4" />
-										{t('reset')}
-									</Button>
+											<RotateCcw className="h-4 w-4" />
+											{t('reset')}
+										</Button>
+									</div>
+
+									{error && <p className="text-sm text-red-600">{error}</p>}
 								</div>
 
-								{error && <p className="text-sm text-red-600">{error}</p>}
-							</div>
+								<div className="mt-8 grid gap-4 md:grid-cols-2">
+									<div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+										<h2 className="text-sm font-semibold text-slate-700">
+											{t('payloadTitle')}
+										</h2>
+										<pre className="mt-2 overflow-x-auto text-xs text-slate-600">
+											{JSON.stringify(payloadPreview, null, 2)}
+										</pre>
+									</div>
 
-							<div className="mt-8 grid gap-4 md:grid-cols-2">
-								<div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-									<h2 className="text-sm font-semibold text-slate-700">
-										{t('payloadTitle')}
-									</h2>
-									<pre className="mt-2 overflow-x-auto text-xs text-slate-600">
-										{JSON.stringify(payloadPreview, null, 2)}
-									</pre>
+									<div className="flex min-h-64 items-center justify-center rounded-xl border border-slate-200 bg-white p-4">
+										{svg ? (
+											<Image
+												src={imageSource}
+												alt={t('qrAlt')}
+												width={288}
+												height={288}
+												unoptimized
+												className="h-auto w-full max-w-72"
+											/>
+										) : (
+											<p className="text-sm text-slate-500">
+												{t('noQrYet')}
+											</p>
+										)}
+									</div>
 								</div>
-
-								<div className="flex min-h-64 items-center justify-center rounded-xl border border-slate-200 bg-white p-4">
-									{svg ? (
-										<Image
-											src={imageSource}
-											alt={t('qrAlt')}
-											width={288}
-											height={288}
-											unoptimized
-											className="h-auto w-full max-w-72"
-										/>
-									) : (
-										<p className="text-sm text-slate-500">
-											{t('noQrYet')}
-										</p>
-									)}
-								</div>
-							</div>
-						</>
-					)
-				}}
-			</FormContext>
+							</>
+						)
+					}}
+				</FormContext>
+			</div>
 		</div>
 	)
 }

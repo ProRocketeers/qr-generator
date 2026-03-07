@@ -27,7 +27,7 @@ export function LanguageSwitcher() {
 				disabled={isPending || locale === 'cs'}
 				className={`rounded-md px-3 py-1 text-sm font-medium transition-colors ${
 					locale === 'cs'
-						? 'bg-slate-900 text-white'
+						? 'bg-gradient-to-br from-[#051641] to-[#0a3d7a] text-white'
 						: 'bg-slate-100 text-slate-700 hover:bg-slate-200'
 				}`}
 			>
@@ -38,7 +38,7 @@ export function LanguageSwitcher() {
 				disabled={isPending || locale === 'en'}
 				className={`rounded-md px-3 py-1 text-sm font-medium transition-colors ${
 					locale === 'en'
-						? 'bg-slate-900 text-white'
+						? 'bg-gradient-to-br from-[#051641] to-[#0a3d7a] text-white'
 						: 'bg-slate-100 text-slate-700 hover:bg-slate-200'
 				}`}
 			>
