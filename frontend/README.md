@@ -1,36 +1,126 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend - QR Generator
 
-## Getting Started
+Next.js frontend pro generování QR kódů s možností uložení do databáze backendu.
 
-First, run the development server:
+## Co frontend dělá
+
+- Poskytuje web UI pro vytvoření QR kódu (text, URL, email, ...).
+- Umožňuje vybrat si typ QR kódu z dropdown menu.
+- Generuje QR kód voláním backendu (`/api/v1/qr`).
+- Zobrazuje vygenerovaný QR kód uživateli.
+- Umožňuje si QR kód stáhnout nebo zkopírovat do schránky.
+
+## Tech stack
+
+- Next.js 15 (App Router)
+- React 19 + TypeScript
+- TailwindCSS + Radix UI
+- React Hook Form + Zod (validace)
+- TanStack React Query
+- Axios
+
+## Rychlý start
+
+1. Nainstaluj dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Priprav env (volitelné, pokud běží backend na localhost:3001):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cp .env.local.example .env.local  # pokud existuje
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Spusť dev server:
 
-## Learn More
+```bash
+pnpm dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Frontend běží na [http://localhost:3000](http://localhost:3000).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Env proměnné
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Použité proměnné (ve výchozím settings):
 
-## Deploy on Vercel
+```env
+API_URL=http://localhost:3001
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Pokud jsi změnil port backendu, uprav `API_URL` v `.env.local`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Struktura projektu
+
+```
+src/
+├── app/              # Next.js App Router pages
+│   ├── page.tsx      # Hlavní stránka (/)
+│   ├── layout.tsx    # Root layout
+│   └── admin/        # Admin sekce (login, dashboard)
+├── api/              # API klient
+│   ├── axios.ts      # Axios instance s baseURL
+│   ├── apiEndpoints.ts
+│   └── qr.ts
+├── components/
+│   ├── client/       # Client-side komponenty
+│   │   ├── QrForm.tsx
+│   │   ├── SelectTypeForm.tsx
+│   │   ├── EmailForm.tsx
+│   │   ├── UrlForm.tsx
+│   │   └── ImageQR.tsx
+│   └── ui/           # Reusable UI komponenty (form fields, buttons, ...)
+├── hooks/
+│   ├── useGetIdParam.ts
+│   └── api/
+│       └── qr.ts     # React Query hooks pro QR API
+├── utils/
+│   ├── schemas/      # Zod validační schémata (emailSchema, qrSchema, ...)
+│   ├── helpers/      # Utility funkce (decode, encode, getFormsMap)
+│   ├── consts/       # Konstanty
+│   ├── types/        # TypeScript typy
+│   └── providers/    # Context providers (QueryProvider)
+└── middleware.ts     # Next.js middleware
+```
+
+## Hlavní komponenty
+
+- **SelectTypeForm**: Dropdown pro výběr typu QR kódu (url, email, atd.).
+- **UrlForm / EmailForm**: Formuláře pro konkrétní typ QR kódu.
+- **ImageQR**: Komponenta pro zobrazení vygenerovaného QR kódu.
+- **FormSelectWrapper**: Wrapper, který vybere správný formulář na základě типu.
+
+## Komunikace s backendem
+
+Frontend volá backend přes Axios s baseURL `http://localhost:3001`:
+
+```typescript
+POST /api/v1/qr
+{
+  "type": "url",
+  "data": { "url": "https://example.com" }
+}
+```
+
+Odpověď:
+```json
+{
+  "code": "QRAB12"
+}
+```
+
+## Užitečné skripty
+
+```bash
+pnpm dev          # Spusti dev server s Turbopack
+pnpm build        # Build pro produkci
+pnpm start        # Start prod serveru
+pnpm lint         # ESLint check
+```
+
+## Validace formulářů
+
+- EmailForm: validuje email, subject, body (Zod schema)
+- UrlForm: validuje URL (Zod schema)
+- Globální `ValidationPipe` není na frontendu, validace je cliente-side
