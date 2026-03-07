@@ -3,7 +3,7 @@
 import { useFormContext } from "react-hook-form"
 import type { FormValues } from "@/utils/schemas/formSelectWrapperSchema"
 
-export function QrTypeSelect() {
+export function SelectQrType() {
 	const { register } = useFormContext<FormValues>()
 
 	return (

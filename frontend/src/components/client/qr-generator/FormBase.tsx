@@ -1,38 +1,33 @@
 "use client"
 
-import { api } from "@/api/axios"
 import { Button } from "@/components/ui/reusable/Button"
 import Image from "next/image"
 import { useState } from "react"
 import { FormContext } from "@/components/ui/form"
 import { schema, defaultValues, type FormValues } from "@/utils/schemas/formSelectWrapperSchema"
+import { useGenerateQrSvg } from "@/hooks/api/qr"
 import {
-	EmailFields,
+	FieldsEmail,
+	FieldText,
+	FieldUrl,
+	SelectQrType,
 	getPayloadPreview,
-	QrTypeSelect,
-	TextField,
-	UrlField,
-} from "@/components/client/forms/form-select-wrapper"
+} from "@/components/client/qr-generator/form"
 
-export function FormSelectWrapper() {
+export function FormBase() {
 	const [svg, setSvg] = useState("")
 	const [error, setError] = useState("")
-	const [isPending, setIsPending] = useState(false)
+	const { mutateAsync: generateQrSvg, isPending } = useGenerateQrSvg()
 
 	const handleSubmit = async (formValues: FormValues) => {
 		setError("")
 		const payloadPreview = getPayloadPreview(formValues)
 
-		setIsPending(true)
 		try {
-			const response = await api.post<string>("/api/v1/qr/svg", payloadPreview, {
-				responseType: "text",
-			})
-			setSvg(response.data)
+			const nextSvg = await generateQrSvg(payloadPreview)
+			setSvg(nextSvg)
 		} catch {
 			setError("Generovani QR selhalo. Zkontroluj, ze backend bezi na API_URL.")
-		} finally {
-			setIsPending(false)
 		}
 	}
 
@@ -55,11 +50,11 @@ export function FormSelectWrapper() {
 					return (
 						<>
 							<div className="mt-6 grid gap-4">
-								<QrTypeSelect />
+								<SelectQrType />
 
-								{qrType === "url" && <UrlField />}
-								{qrType === "text" && <TextField />}
-								{qrType === "email" && <EmailFields />}
+								{qrType === "url" && <FieldUrl />}
+								{qrType === "text" && <FieldText />}
+								{qrType === "email" && <FieldsEmail />}
 
 								<div className="flex items-center gap-3">
 									<Button type="submit" variant="secondary" disabled={isPending}>
