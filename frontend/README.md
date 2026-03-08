@@ -46,10 +46,10 @@ Frontend běží na [http://localhost:3000](http://localhost:3000).
 Použité proměnné (ve výchozím settings):
 
 ```env
-API_URL=http://localhost:3001
+NEXT_PUBLIC_API_URL=http://localhost:3001
 ```
 
-Pokud jsi změnil port backendu, uprav `API_URL` v `.env.local`.
+Pokud jsi změnil port backendu, uprav `NEXT_PUBLIC_API_URL` v `.env.local`.
 
 ## Struktura projektu
 
