@@ -30,7 +30,7 @@ pnpm install
 2. Priprav env (volitelné, pokud běží backend na localhost:3001):
 
 ```bash
-cp .env.local.example .env.local  # pokud existuje
+cp .env.example .env.local  # pokud existuje
 ```
 
 3. Spusť dev server:
