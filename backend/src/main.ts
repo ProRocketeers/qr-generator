@@ -4,9 +4,13 @@ import { ValidationPipe } from '@nestjs/common'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { AppModule } from '@backend/app.module'
 import { configureSwagger } from '@backend/configs/swagger.config'
+import { GlobalExceptionFilter } from '@backend/filters/global-exception.filter'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
+
+  // Register global exception filter
+  app.useGlobalFilters(new GlobalExceptionFilter())
 
   configureSwagger(app)
   app.useGlobalPipes(
