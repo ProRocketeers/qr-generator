@@ -30,6 +30,7 @@ WORKDIR /app
 COPY --from=builder /app/ ./
 
 RUN addgroup -S app && adduser -S app -G app \
+	&& chmod +x /app/docker/entrypoint.sh \
 	&& mkdir -p /app/temp \
 	&& chown -R app:app /app/temp
 USER app
@@ -42,7 +43,10 @@ ENV DB_USER=${DB_USER}
 ENV DB_PASSWORD=${DB_PASSWORD}
 ENV DB_NAME=${DB_NAME}
 ENV DB_SSL=${DB_SSL}
+ENV DB_RUN_MIGRATIONS=true
+ENV DB_MIGRATION_MAX_ATTEMPTS=30
+ENV DB_MIGRATION_RETRY_DELAY_SECONDS=2
 
 EXPOSE ${PORT}
 
-CMD ["node", "dist/src/main.js"]
+CMD ["/app/docker/entrypoint.sh"]
