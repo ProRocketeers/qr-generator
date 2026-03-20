@@ -3,12 +3,12 @@ FROM node:lts-alpine AS builder
 
 WORKDIR /app
 
-COPY backend/package.json backend/pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml ./
 
 RUN npm install -g pnpm
 RUN pnpm install --frozen-lockfile
 
-COPY backend/ .
+COPY . .
 
 RUN pnpm run build
 
