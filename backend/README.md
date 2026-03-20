@@ -73,6 +73,8 @@ DB_PASSWORD=secret
 DB_SSL=false
 ```
 
+V deploymentu, kde PostgreSQL vyzaduje TLS, nastav `DB_SSL=true`. Alternativne funguje i `PGSSLMODE=require` nebo `sslmode=require` v `DATABASE_URL`.
+
 Poznamka: `BASE_PATH` se aktualne pouziva pro Swagger server metadata, ne pro global prefix rout.
 
 ## Docker a pgAdmin
