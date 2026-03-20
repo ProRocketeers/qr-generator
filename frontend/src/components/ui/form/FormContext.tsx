@@ -15,7 +15,7 @@ type Props<T extends z.ZodObject<z.ZodRawShape>> = {
 	schema: T;
 	defaultValues?: DefaultValues<z.input<T>>;
 	onSubmit: SubmitHandler<z.output<T>>;
-} & UseFormProps<z.input<T>>;
+} & Omit<UseFormProps<z.input<T>>, 'resolver' | 'defaultValues'>;
 
 export const FormContext = <T extends z.ZodObject<z.ZodRawShape>>({
 	children,
@@ -24,11 +24,13 @@ export const FormContext = <T extends z.ZodObject<z.ZodRawShape>>({
 	onSubmit,
 	...formProps
 }: Props<T>) => {
-	const form = useForm<z.input<T>, unknown, z.output<T>>({
-		resolver: zodResolver(schema),
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const form = useForm<z.input<T>>({
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		resolver: zodResolver(schema) as any,
 		defaultValues,
 		...formProps,
-	})
+	}) as UseFormReturn<z.input<T>, unknown, z.output<T>>
 
 	return (
 		<FormProvider {...form}>
