@@ -16,7 +16,7 @@ RUN pnpm run build
 FROM node:lts-alpine AS runner
 
 ARG NODE_ENV=production
-ARG PORT=3001
+ARG PORT=3000
 ARG DB_HOST
 ARG DB_PORT
 ARG DB_USER
