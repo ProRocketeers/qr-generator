@@ -1,4 +1,4 @@
-import '../polyfills/dom-env'
+// import '../polyfills/dom-env'
 import { Seeder } from '@mikro-orm/seeder'
 import { EntityManager } from '@mikro-orm/postgresql'
 import { QrEntity } from '@backend/qr/qr.entity'
