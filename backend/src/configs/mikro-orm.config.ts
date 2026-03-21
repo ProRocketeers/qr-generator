@@ -20,6 +20,9 @@ export default defineConfig({
   port: +(process.env.DB_PORT || 5432),
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
+  driverOptions: isSslEnabled
+    ? { connection: { ssl: { rejectUnauthorized: false } } }
+    : {},
   migrations: {
     path: 'db/migrations',
     pathTs: 'db/migrations',
