@@ -8,6 +8,7 @@ import { GlobalExceptionFilter } from '@backend/filters/global-exception.filter'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
+  const port = Number(process.env.PORT || 3000)
 
   // Register global exception filter
   app.useGlobalFilters(new GlobalExceptionFilter())
@@ -17,7 +18,6 @@ async function bootstrap() {
     new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }),
   )
 
-  const port = Number(process.env.PORT || 3000)
   app.enableCors()
   await app.listen(port)
 }
